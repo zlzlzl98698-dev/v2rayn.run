@@ -1,0 +1,59 @@
+---
+interface BreadcrumbItem {
+  name: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '首页',
+      item: 'https://v2rayn.run/',
+    },
+    ...items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 2,
+      name: item.name,
+      ...(item.href ? { item: `https://v2rayn.run${item.href}` } : {}),
+    })),
+  ],
+};
+---
+
+<nav aria-label="Breadcrumb" class="py-3 text-xs text-slate-500 flex items-center flex-wrap gap-1.5">
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  <a href="/" class="hover:text-brand-600 transition-colors flex items-center gap-1">
+    <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+    </svg>
+    <span>首页</span>
+  </a>
+
+  {items.map((item, idx) => {
+    const isLast = idx === items.length - 1;
+    return (
+      <div class="flex items-center gap-1.5">
+        <svg class="w-3 h-3 text-slate-300" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+        </svg>
+        {isLast || !item.href ? (
+          <span class="font-medium text-slate-800 line-clamp-1">{item.name}</span>
+        ) : (
+          <a href={item.href} class="hover:text-brand-600 transition-colors line-clamp-1">
+            {item.name}
+          </a>
+        )}
+      </div>
+    );
+  })}
+</nav>

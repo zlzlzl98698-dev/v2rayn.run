@@ -1,0 +1,102 @@
+---
+import { navigationData, siteMeta } from '../../data/navigation';
+---
+
+<footer class="bg-white border-t border-surface-border text-slate-600 mt-20 pt-16 pb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Top Grid: About & 4 Nav Columns -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 pb-12 border-b border-slate-100">
+      
+      <!-- Brand & Mission (2 cols) -->
+      <div class="lg:col-span-2 space-y-4">
+        <div class="flex items-center gap-3">
+          <img
+            src="/images/avatar.webp?v=2"
+            alt={siteMeta.name}
+            width="36"
+            height="36"
+            loading="lazy"
+            decoding="async"
+            class="w-9 h-9 rounded-xl object-cover shadow-sm border border-slate-200/80"
+          />
+          <span class="text-xl font-bold text-slate-900">{siteMeta.name}</span>
+        </div>
+        
+        <p class="text-sm text-slate-500 leading-relaxed pr-4">
+          专注于中文网络工具评测、专线机场测速观测、Clash客户端教程与网络风险情报。我们坚持「Answer-First」客观实测原则，拒绝虚构数据与无依据神化。
+        </p>
+
+        <div class="pt-2 flex flex-wrap gap-2 text-xs text-slate-400">
+          <span class="px-2 py-1 rounded bg-slate-100 text-slate-600">IEPL/IPLC实测</span>
+          <span class="px-2 py-1 rounded bg-slate-100 text-slate-600">4K流媒体观测</span>
+          <span class="px-2 py-1 rounded bg-slate-100 text-slate-600">31家品牌数据库</span>
+          <span class="px-2 py-1 rounded bg-slate-100 text-slate-600">Pagefind全文检索</span>
+        </div>
+      </div>
+
+      <!-- Nav Columns (4 cols) -->
+      {navigationData.map((nav) => (
+        <div class="space-y-3">
+          <h4 class="text-sm font-bold text-slate-900 tracking-wider">
+            <a href={nav.href} class="hover:text-brand-600 transition-colors">{nav.title}</a>
+          </h4>
+          <ul class="space-y-2 text-xs">
+            {nav.items.map((item) => (
+              <li>
+                <a href={item.href} class="text-slate-500 hover:text-brand-600 transition-colors">
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+    </div>
+
+    <!-- Middle: Quick Links & Priority Brand Entry -->
+    <div class="py-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="font-semibold text-slate-700">快速通道：</span>
+        <a href="/brands/guangsu/" class="text-brand-600 font-semibold hover:underline">光速云深度评测 (主推优先)</a>
+        <span class="text-slate-300">·</span>
+        <a href="/brands/" class="hover:text-brand-600">31家机场参数库</a>
+        <span class="text-slate-300">·</span>
+        <a href="/airport/ranking/" class="hover:text-brand-600">2026机场天梯榜</a>
+        <span class="text-slate-300">·</span>
+        <a href="/clash/verge-download/" class="hover:text-brand-600">Clash Verge官方下载</a>
+        <span class="text-slate-300">·</span>
+        <a href="/resources/warning/" class="hover:text-brand-600">跑路预警与防坑</a>
+        <span class="text-slate-300">·</span>
+        <a href="/about/" class="text-slate-700 font-semibold hover:text-brand-600">关于实验室与评测方针</a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <a href="/about/" class="hover:text-brand-600">关于我们</a>
+        <a href="/sitemap-index.xml" class="hover:text-brand-600">Sitemap 索引</a>
+        <a href="/robots.txt" class="hover:text-brand-600">robots.txt</a>
+      </div>
+    </div>
+
+    <!-- Affiliate & Compliance Disclosure (Mandatory) -->
+    <div class="py-6 border-b border-slate-100 bg-slate-50/60 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 my-6 rounded-2xl">
+      <div class="max-w-4xl mx-auto text-center space-y-2">
+        <p class="text-xs font-semibold text-slate-600">商业推广与客观中立声明 (Affiliate Disclosure)</p>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          本站部分外部品牌注册链接包含推广推荐参数（Affiliate Links）。当您通过本站链接注册或选购服务时，我们可能会获得相应的佣金收入。此收益用于支持本站服务器维护、自动化测速节点采购与原创技术内容编写，绝不会额外增加您的支付费用。本站评测结论基于真实采集数据与网络基准测试，坚决不因商业合作而将服务伪装成独立实测第一名。
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom: Copyright & Legal -->
+    <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <p>&copy; {new Date().getFullYear()} {siteMeta.domain} ({siteMeta.name}). 保留所有权利。</p>
+      <div class="flex items-center gap-4">
+        <span>遵循中华人民共和国与国际互联网相关法规</span>
+        <span>仅供网络技术学习与合法跨境业务研究</span>
+      </div>
+    </div>
+
+  </div>
+</footer>

@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 - 页面未找到 | v2rayn指南"
+  description="抱歉，您访问的页面不存在或已被移除。"
+  noindex={true}
+>
+  <div class="max-w-2xl mx-auto px-4 py-20 text-center">
+    <div class="w-20 h-20 rounded-3xl bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-6 shadow-sm">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+      </svg>
+    </div>
+
+    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+      404 - 页面走丢了
+    </h1>
+    <p class="text-slate-500 text-base leading-relaxed mb-8">
+      您请求的网页可能已被移动、更名或暂时下线。请检查输入的网址或通过下方链接继续浏览。
+    </p>
+
+    <!-- Quick Navigation Buttons -->
+    <div class="flex flex-wrap items-center justify-center gap-3 mb-10">
+      <a
+        href="/"
+        class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md shadow-brand-500/20 transition-all"
+      >
+        返回网站首页
+      </a>
+      <a
+        href="/brands/"
+        class="px-6 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-brand-600 hover:bg-slate-50 font-bold text-sm transition-colors"
+      >
+        浏览品牌数据库
+      </a>
+      <a
+        href="/search/"
+        class="px-6 py-3 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-brand-600 hover:bg-slate-50 font-bold text-sm transition-colors"
+      >
+        站内全文搜索
+      </a>
+    </div>
+
+    <!-- Category Shortcuts -->
+    <div class="pt-8 border-t border-slate-200 text-xs text-slate-500">
+      <p class="font-semibold text-slate-700 mb-3">或者直接访问四大专题：</p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="/airport/" class="text-brand-600 hover:underline">机场推荐门户</a>
+        <span>·</span>
+        <a href="/vpn/" class="text-brand-600 hover:underline">VPN与加速器</a>
+        <span>·</span>
+        <a href="/clash/" class="text-brand-600 hover:underline">Clash客户端</a>
+        <span>·</span>
+        <a href="/resources/" class="text-brand-600 hover:underline">资源与情报</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

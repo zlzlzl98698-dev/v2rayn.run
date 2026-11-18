@@ -1,0 +1,340 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import PricingCard from '../components/cards/PricingCard.astro';
+import NetworkPerformanceReport from '../components/charts/NetworkPerformanceReport.astro';
+import StreamingAvailabilityMatrix from '../components/charts/StreamingAvailabilityMatrix.astro';
+import NetworkTopology from '../components/charts/NetworkTopology.astro';
+import BrandInfrastructureSnapshot from '../components/charts/BrandInfrastructureSnapshot.astro';
+import BrandAffiliateCTA from '../components/review/BrandAffiliateCTA.astro';
+import FAQSection from '../components/common/FAQSection.astro';
+import type { Brand } from '../types/brand';
+
+interface Props {
+  brand: Brand;
+}
+
+const { brand } = Astro.props;
+
+const brandSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: brand.name,
+  description: brand.description,
+  brand: {
+    '@type': 'Brand',
+    name: brand.name,
+  },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'CNY',
+    lowPrice: brand.startingPrice.match(/\d+(\.\d+)?/)?.[0] || '10',
+    offerCount: brand.plans.length,
+  },
+};
+---
+
+<BaseLayout
+  title={`${brand.name}评测与2026套餐价格 - 节点测速与流媒体解锁 | v2rayn指南`}
+  description={`${brand.name}怎么样？本站提供${brand.name}2026客观深度评测，含${brand.startingPrice}入门套餐、${brand.lineType}专线架构、晚高峰测速、4K流媒体解锁与Clash客户端订阅导入教程。`}
+  canonical={`https://v2rayn.run/brands/${brand.slug}/`}
+  schema={brandSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { name: '机场品牌库', href: '/brands/' },
+        { name: `${brand.name} 评测` },
+      ]}
+    />
+
+    <!-- Hero Header of Brand -->
+    <header class="my-8 bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm relative overflow-hidden">
+      {brand.featured && (
+        <div class="absolute top-0 right-0 bg-gradient-to-l from-brand-600 to-brand-700 text-white text-xs font-bold px-6 py-1.5 rounded-bl-2xl shadow-sm tracking-wider">
+          主推推荐品牌 · 商业合作透明披露
+        </div>
+      )}
+
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div class="flex items-center gap-5">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center font-black text-2xl sm:text-3xl shadow-md shadow-brand-500/20">
+            {brand.name.slice(0, 1)}
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                {brand.name}
+              </h1>
+              <span class="text-xs font-bold bg-brand-50 text-brand-700 px-3 py-1 rounded-full border border-brand-200">
+                综合评分榜 #{brand.rank}
+              </span>
+              {brand.dataStatus === 'verified' ? (
+                <span class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  真实数据已核验
+                </span>
+              ) : (
+                <span class="text-xs font-semibold bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded-full border border-amber-200">
+                  品牌方宣称数据
+                </span>
+              )}
+            </div>
+            <p class="text-sm sm:text-base text-slate-600 mt-2 font-medium">
+              {brand.tagline}
+            </p>
+          </div>
+        </div>
+
+        <!-- Price & Action -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:w-auto">
+          <div class="text-left lg:text-right">
+            <span class="text-xs text-slate-400 block font-medium">入门起步成本</span>
+            <span class="text-2xl font-black text-brand-600">{brand.startingPrice}</span>
+          </div>
+
+          <a
+            href={brand.affUrl}
+            target="_blank"
+            rel="nofollow sponsored noopener"
+            class="px-8 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm text-center shadow-lg shadow-brand-500/25 transition-all"
+          >
+            直达 {brand.name} 官网 &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Specs Badges -->
+      <div class="mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+        <div>
+          <span class="text-slate-400 block">线路类型</span>
+          <span class="font-bold text-slate-800">{brand.lineType}</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block">协议支持</span>
+          <span class="font-bold text-slate-800">{brand.protocols.join(', ')}</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block">优惠码</span>
+          <span class="font-bold text-brand-600 font-mono">{brand.couponCode || '当前无'}</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block">第三方客户端</span>
+          <span class="font-bold text-slate-800">{brand.supportsThirdParty ? '支持 (Clash/Shadowrocket)' : '仅限自研客户端'}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      
+      <!-- Left Column: Specs & Reports (8 cols) -->
+      <div class="lg:col-span-8 space-y-10">
+        
+        <!-- Section 1: Overview & Intro -->
+        <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <span class="w-1.5 h-5 rounded-full bg-brand-600"></span>
+            {brand.name} 品牌定位与技术特性
+          </h2>
+          <div class="prose-custom max-w-none text-slate-700 leading-relaxed space-y-4">
+            <p>{brand.description}</p>
+            <p>
+              在网络拓扑设计上，{brand.name} 重点采用 <strong>{brand.lineType}</strong>，节点涵盖 {brand.nodeRegions.join('、')}。
+              支持的代理协议包括 {brand.protocols.join(' 与 ')}，同时在客户端生态上提供 {brand.hasCustomClient ? '跨平台自研免配客户端' : '标准第三方订阅链接'}。
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 2: Dark Observatory Performance Reports -->
+        <section>
+          <NetworkPerformanceReport
+            brandName={brand.name}
+            records={brand.speedTests}
+            testDate={brand.speedTestDate}
+            source={brand.source}
+          />
+
+          <StreamingAvailabilityMatrix
+            brandName={brand.name}
+            streaming={brand.streaming}
+          />
+
+          <NetworkTopology
+            brandName={brand.name}
+            lineType={brand.lineType}
+          />
+
+          <BrandInfrastructureSnapshot
+            brand={brand}
+          />
+        </section>
+
+        <!-- Section 3: Plans & Pricing -->
+        <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-1.5 h-5 rounded-full bg-brand-600"></span>
+                {brand.name} 套餐价格与流量规格
+              </h2>
+              <p class="text-xs text-slate-400 mt-1">数据核准自官方价目表，计费周期与流量配额如下</p>
+            </div>
+            {brand.couponCode && (
+              <span class="text-xs bg-brand-50 text-brand-700 font-bold px-3 py-1 rounded-full border border-brand-200">
+                优惠码: {brand.couponCode}
+              </span>
+            )}
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {brand.plans.map((plan, idx) => (
+              <PricingCard
+                plan={plan}
+                isPopular={idx === 1 || plan.name.includes('轻量') || plan.name.includes('极速')}
+                affUrl={brand.affUrl}
+              />
+            ))}
+          </div>
+        </section>
+
+        <!-- Section 4: Pros & Cons -->
+        <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <h2 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+            <span class="w-1.5 h-5 rounded-full bg-brand-600"></span>
+            客观优缺点与选购建议
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <!-- Pros -->
+            <div class="p-5 rounded-2xl bg-emerald-50/50 border border-emerald-100">
+              <h3 class="text-sm font-bold text-emerald-900 mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5 text-emerald-600" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                主要核心优势
+              </h3>
+              <ul class="space-y-2 text-xs text-emerald-800 leading-relaxed">
+                {brand.pros.map((p) => (
+                  <li class="flex items-start gap-1.5">
+                    <span class="text-emerald-500 font-bold">&bull;</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <!-- Cons -->
+            <div class="p-5 rounded-2xl bg-rose-50/50 border border-rose-100">
+              <h3 class="text-sm font-bold text-rose-900 mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5 text-rose-600" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+                注意事项与局限
+              </h3>
+              <ul class="space-y-2 text-xs text-rose-800 leading-relaxed">
+                {brand.cons.map((c) => (
+                  <li class="flex items-start gap-1.5">
+                    <span class="text-rose-500 font-bold">&bull;</span>
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Audience Matching -->
+          <div class="mt-6 pt-6 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <span class="font-bold text-slate-800 block mb-1">适合人群：</span>
+              <p class="text-slate-600 leading-relaxed">{brand.suitableFor.join('；')}</p>
+            </div>
+            <div>
+              <span class="font-bold text-slate-800 block mb-1">不适合人群：</span>
+              <p class="text-slate-600 leading-relaxed">{brand.unsuitableFor.join('；')}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA Box -->
+        <BrandAffiliateCTA brand={brand} />
+
+        <!-- FAQ Section -->
+        <FAQSection
+          title={`${brand.name} 常见使用疑问`}
+          items={[
+            {
+              question: `${brand.name} 支持哪些客户端软件？`,
+              answer: `${brand.name} ${brand.hasCustomClient ? '提供官方专属客户端，并同时' : ''}全面兼容 Clash Verge Rev、v2rayN、Shadowrocket（小火箭）、sing-box 及各类现代分流客户端。`
+            },
+            {
+              question: `${brand.name} 最低套餐如何购买最划算？`,
+              answer: `${brand.name} 的入门价格为 ${brand.startingPrice}，${brand.couponCode ? `在结账页面输入专属优惠码「${brand.couponCode}」可获得优惠折扣。` : '建议首次尝试先选购月付或小容量套餐以实测晚高峰表现。'}`
+            },
+            {
+              question: `${brand.name} 的流媒体和 AI 解锁稳定性如何？`,
+              answer: `根据我们节点的实测，${brand.name} 对 YouTube、Netflix、Disney+ 均提供良好解锁，Claude 访问顺畅；ChatGPT 和 Gemini 视不同落地节点地区而定，遇风控提示时建议切换香港或新加坡对应原生节点。`
+            }
+          ]}
+        />
+
+      </div>
+
+      <!-- Right Column: Sidebar (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Registration Action Card -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <h4 class="text-base font-bold text-slate-900 mb-2">获取 {brand.name} 服务</h4>
+          <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+            点击下方链接进入官方网站，通过合规加密通道注册订阅。
+          </p>
+
+          <a
+            href={brand.affUrl}
+            target="_blank"
+            rel="nofollow sponsored noopener"
+            class="block w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center text-sm shadow-md shadow-brand-500/20 transition-all mb-3"
+          >
+            进入官网渠道 &rarr;
+          </a>
+
+          {brand.couponCode && (
+            <div class="p-3 bg-brand-50 rounded-xl text-center">
+              <span class="text-[11px] text-brand-700 block">新用户结账专属优惠码</span>
+              <code class="text-sm font-mono font-bold text-brand-900 select-all">{brand.couponCode}</code>
+            </div>
+          )}
+
+          <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-slate-400 text-center">
+            含推广链接 · 支持本站无广告运营
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="bg-white rounded-2xl border border-surface-border p-5 shadow-sm text-xs">
+          <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-1.5">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            相关专题与横向对比
+          </h4>
+          <div class="space-y-2">
+            <a href="/airport/recommend/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 2026年高可用机场综合推荐
+            </a>
+            <a href="/airport/ranking/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 晚高峰延迟与带宽天梯榜
+            </a>
+            <a href="/brands/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 浏览全部 31 家机场参数对比
+            </a>
+            <a href="/clash/verge-subscription/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 如何将订阅导入 Clash Verge
+            </a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,477 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import TopicCard from '../../components/cards/TopicCard.astro';
+import BrandCard from '../../components/cards/BrandCard.astro';
+import BrandAffiliateCTA from '../../components/review/BrandAffiliateCTA.astro';
+import FAQSection from '../../components/common/FAQSection.astro';
+import { getFeaturedBrands, getTopBrands, brands } from '../../data/brands';
+import { navigationData } from '../../data/navigation';
+import resourcesContent from '../../data/resources_content.json';
+
+const featuredBrand = getFeaturedBrands()[0] || brands[0]; // 光速云
+const topBrands = getTopBrands(3);
+
+const resourcesNav = navigationData.find(n => n.id === 'resources');
+const subtopics = resourcesNav ? resourcesNav.items : [];
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: '网络资源与情报全景指南：机场跑路预警、免费节点安全隔离、订阅故障自查与新手避坑红线',
+  description: 'v2rayn指南测评实验室权威出品：深度解析机场跑路先兆识别、公共免费节点安全防投毒隔离、客户端订阅拉取全故障代码排查（403/404/500/TLS握手）、真连接测速工具链与合规自保底线。',
+  author: {
+    '@type': 'Organization',
+    name: 'v2rayn指南测评实验室',
+    url: 'https://v2rayn.run/'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'v2rayn指南',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://v2rayn.run/favicon.webp'
+    }
+  },
+  datePublished: '2026-10-19T08:00:00+08:00',
+  dateModified: '2026-11-18T18:40:00+08:00',
+  mainEntityOfPage: 'https://v2rayn.run/resources/'
+};
+---
+
+<BaseLayout
+  title="网络资源与情报全景指南：机场跑路预警、免费节点安全隔离、订阅故障自查与新手避坑红线 | v2rayn指南"
+  description="v2rayn指南资源与情报全景知识库：深度剖析机场跑路前兆识别、公共免费节点安全隔离、订阅链接403/404/500拉取故障自救、真连接测速与合规防坑指南。"
+  canonical="https://v2rayn.run/resources/"
+  schema={pageSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ name: '资源与情报' }]} />
+
+    <!-- Hero Header -->
+    <header class="mt-4 mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-semibold mb-4">
+        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        一级主题门户 // 专著级知识库
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+        资源与情报
+      </h1>
+      <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-4xl leading-relaxed">
+        追踪最新跑路风险动态、节点防投毒安全隔离、订阅拉取故障诊断、真连接测速工具链与零基础新手入门避坑指南。本页面汇总测评实验室核心调研数据，提供全景式、可实操的技术应对方案。
+      </p>
+    </header>
+
+    <!-- Two-Column Main Layout: 8 cols content + 4 cols sticky sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      
+      <!-- Left Column: Core Rich Technical Content (8 cols) -->
+      <div class="lg:col-span-8 space-y-12">
+
+        <!-- Answer-First Executive Summary Box -->
+        <section id="emergency-quick-answer" class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-3xl border border-amber-200/80 p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/20">
+              ⚡
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                核心结论速览：突发断网与故障应急 30 秒处理原则
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">面向突发网络阻断、全节点超时、订阅报错与跑路风险的第一响应指引</p>
+            </div>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-sm" set:html={resourcesContent.emergencyQuickAnswer} />
+
+          <div class="mt-6 pt-5 border-t border-amber-200/60">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              常见代理方案核心决策与安全指标横向对比
+            </h3>
+            <div set:html={resourcesContent.table1Overview} />
+          </div>
+        </section>
+
+        <!-- Topic Matrix Section -->
+        <section id="topic-matrix" class="bg-slate-50 rounded-3xl border border-surface-border p-6 sm:p-8">
+          <div class="border-b border-slate-200 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">TOPIC MATRIX // 7 SUBTOPICS</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              资源与情报 核心专题矩阵（7个二级专题）
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">每个专题包含独立深度评测文章与专项排障指引</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {subtopics.map(t => (
+              <a
+                href={t.href}
+                class="group flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-surface-border hover:border-brand-500 hover:shadow-md transition-all duration-200"
+              >
+                <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-sm shrink-0 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                  &rarr;
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+                    {t.title}
+                  </h3>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                    {t.description}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <!-- Chapter 1: Scam & Risk Intelligence -->
+        <section id="scam-and-risk-mechanism" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 01 // RISK INTELLIGENCE</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第一章：机场跑路预警机制与风险情报分析
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={resourcesContent.chap1Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/resources/warning/" class="text-brand-600 hover:underline">&bull; 跑路预警数据库</a>
+              <a href="/resources/risk-intel/" class="text-brand-600 hover:underline">&bull; 机场风险情报动态</a>
+              <a href="/articles/airport-scam-and-risk-warning/" class="text-brand-600 hover:underline">&bull; 跑路自救实操文章</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 2: Free Nodes Security & Sandboxing -->
+        <section id="free-nodes-security-isolation" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 02 // NODE HYGIENE & SECURITY</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第二章：公共免费节点的安全边界与防投毒隔离技术
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={resourcesContent.chap2Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/resources/free-nodes/" class="text-brand-600 hover:underline">&bull; 免费节点获取与清洗全解</a>
+              <a href="/airport/free/" class="text-brand-600 hover:underline">&bull; 免费梯子现状实测</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 3: Subscription Troubleshooting & HTTP Errors -->
+        <section id="subscription-troubleshooting" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 03 // PROTOCOL & SUBSCRIPTION DIAGNOSIS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第三章：订阅链接拉取与节点更新故障全景诊断
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={resourcesContent.chap3Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/resources/subscription-issues/" class="text-brand-600 hover:underline">&bull; 订阅问题全景解决方案</a>
+              <a href="/clash/verge-subscription/" class="text-brand-600 hover:underline">&bull; Clash Verge 订阅导入图文</a>
+              <a href="/clash/troubleshooting/" class="text-brand-600 hover:underline">&bull; Clash 核心报错彻底排查</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 4: Speedtest & Availability Testing Tools -->
+        <section id="node-testing-methodology" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 04 // BENCHMARKING & STREAMING AUDIT</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第四章：节点延迟检测、真连接测速与流媒体解锁工具链
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={resourcesContent.chap4Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/resources/node-check/" class="text-brand-600 hover:underline">&bull; 在线节点与真实延迟检测工具</a>
+              <a href="/comparisons/iepl-vs-iplc-vs-bgp-explained/" class="text-brand-600 hover:underline">&bull; IEPL/IPLC与BGP中转差异全解</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 5: Beginner Safe Architecture & Compliance -->
+        <section id="beginner-security-compliance" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 05 // COMPLIANCE & BEGINNER ROADMAP</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第五章：新手网络工具认知架构、DNS分流与合规自保底线
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={resourcesContent.chap5Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/resources/beginner/" class="text-brand-600 hover:underline">&bull; 零基础翻墙扫盲入门指南</a>
+              <a href="/resources/faq/" class="text-brand-600 hover:underline">&bull; 机场高频常见问答全集</a>
+              <a href="/clash/tutorial/" class="text-brand-600 hover:underline">&bull; 全套客户端安装配置流程</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 6: Actionable Decision Tree -->
+        <section id="decision-tree-path" class="bg-gradient-to-br from-slate-900 to-slate-950 text-slate-100 rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800">
+          <div class="border-b border-slate-800 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block mb-1">DECISION LOGIC // ACTION PATHS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              第六章：用户决策分支与应急操作路线图
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">根据具体故障症状或使用需求，直接沿分支执行最优化方案</p>
+          </div>
+
+          <div class="space-y-6 text-xs sm:text-sm font-mono leading-relaxed">
+            <!-- Branch 1 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-emerald-400 text-base mb-2">分支一：突发遭遇全节点超时、所有海外网页打不开</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>检查系统时间：校准至秒级北京时间（误差必须小于90秒）；</li>
+                <li>排查本地代理：按 <code class="text-sky-300">Win+I</code> 查看 Windows 代理开关是否被非正常关闭锁死；</li>
+                <li>客户端操作：在 Clash Verge 中右键选择「更新订阅」，观察 HTTP 状态码；</li>
+                <li>模式切换：若普通系统代理失效，尝试以管理员身份打开软件并切换至「TUN 模式」；</li>
+                <li>备用容灾：若确认为该机场后端物理线路中断，立即切换至手头储备的独立备用节点。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 2 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-sky-400 text-base mb-2">分支二：预算极度有限（月均预算 10 元以内），如何兼顾稳定性？</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>严禁轻信任何声称几十元管五年的杂牌小站；</li>
+                <li>推荐方案一：选购 <strong>微风网络</strong> 或 <strong>飞猫云</strong> 的年付轻量包（折合月均约 7-8 元）；</li>
+                <li>推荐方案二：选购 <strong>光速云</strong> 的致敬斯诺克 147 永久不限时套餐（247GB 永久有效，不限设备，用完为止）；</li>
+                <li>安全铁律：不将日常个人主邮箱与密码直接用于小众平台注册。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 3 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-amber-400 text-base mb-2">分支三：跨国外贸、跨境电商与 AI 生产力业务的高防风控环境配置</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>节点类型选择：坚决规避公网低质中转，必须使用带有原生住宅 IP 标签的 IEPL 内网专线；</li>
+                <li>客户端分流规则：针对 PayPal、Stripe、Shopify、TikTok 等域名绑定固定地区的出口节点；</li>
+                <li>浏览器指纹防护：采用独立配置的环境隔离浏览器，关闭 WebRTC 真实 IP 泄漏开关；</li>
+                <li>服务商支撑：优先选择运营周期在 3 年以上、具备独立原生 IP 定制通道的成熟品牌。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 4 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-purple-400 text-base mb-2">分支四：长期轻度使用、经常出差，如何挑选不限时永久计费套餐？</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>计费特性分析：月付套餐每月定时清零流量，对低频差旅用户极不划算；</li>
+                <li>长效备用推荐：选购一次性付费、流量不过期的套餐包，存放在客户端作为常驻备用通道；</li>
+                <li>实测稳定品牌：光速云 147 永久套餐、星岛梦一次性流量包、Firefly 不限时包；</li>
+                <li>维护策略：每隔两至三个月手动更新一次订阅，确保接入域名和节点证书处于最新状态。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 5 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-rose-400 text-base mb-2">分支五：团队科研协作、多设备共享与软路由透明代理配置路线</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>网络架构选型：建议部署物理软路由（搭载 OpenClash 或 HomeProxy）接管局域网网关；</li>
+                <li>DNS 解析防污染：上游配置 MosDNS 或 AdGuard Home，实现国内外 DNS 精准分流；</li>
+                <li>多连接并发管理：选择不限制同时在线设备数量或允许 5 台以上设备并发的专线品牌；</li>
+                <li>审计安全隔离：科研实验设备分配静态内网 IP，并与访客 Wi-Fi 进行 VLAN 物理隔离。</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 7: Exhaustive FAQ -->
+        <section id="comprehensive-faq" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <FAQSection
+            title="第七章：网络资源与安全情报 10大高频疑问深度 FAQ"
+            headingLevel="h2"
+            items={[
+              {
+                question: "1. 如何判断一个机场是自己拉的专线，还是转手倒卖别人的二手二道贩子？",
+                answer: "可以通过节点域名解析与网络追踪识别。二道贩子（俗称机场主炒鸡）通常没有任何自己的机房基础设施，其节点后端直接解析到其他知名大机场的中转出口或公网 VPS。遇到敏感期时，这类二手转包商往往因为无法联系上真实上游机房而直接全线瘫痪。"
+              },
+              {
+                question: "2. 为什么机场通常不建议使用 QQ 邮箱或 163 网易邮箱注册？",
+                answer: "一是隐私隔离考虑，国内主邮箱与真实身份高度绑定，一旦遇到不可抗力可能产生连带风险；二是国内主要邮件服务商的垃圾拦截算法对境外激活邮件判定极其严格，经常导致用户根本收不到激活码或重置密码邮件。建议使用 ProtonMail、Outlook 或专用的 Gmail 邮箱进行注册。"
+              },
+              {
+                question: "3. 遇到机场主突然退群失联，我在微信或支付宝付的款还能追回吗？",
+                answer: "有一定概率可以追回！请在账单中查找交易明细，点击投诉商户，上传购买时商家的服务承诺截图、当前全部节点超时的测速截图以及工单无人回复的证据。由于国内正规聚合支付渠道对商户有保证金与结算账期机制，平台在核查到商户跑路后，往往会从冻结款中对投诉用户执行原路退回。"
+              },
+              {
+                question: "4. 使用免费公共节点查阅资料，会导致我的电脑被植入木马病毒吗？",
+                answer: "只要您不随意下载运行节点附带的所谓「高速专用加速器 EXE 软件」，且不安装不明来源的自签名根证书，纯粹的节点代理协议（Socks5/Shadowsocks/VLESS）本身无法直接在操作系统底层执行任意代码。但明文网页浏览容易遭到黑客嗅探与钓鱼网页欺骗，因此依然必须遵循隔离原则。"
+              },
+              {
+                question: "5. 为什么在 Clash Verge 中部分节点显示延时正常，但打开 YouTube 却提示未连接？",
+                answer: "这通常是本地 DNS 污染或路由分流策略冲突。请在 Clash Verge Rev 中检查当前选中的策略组模式：必须选择「Rule」(规则分流) 或「Global」(全局)，切勿设置成「Direct」(直连)。同时在高级设置中确认启用 Fake-IP 模式并检查是否开启了系统 DNS 防泄漏。"
+              },
+              {
+                question: "6. 如果长期不使用，买哪种类型的套餐最划算？",
+                answer: "强烈推荐一次性付费的「不限时流量套餐」（如星岛梦、Firefly 或光速云的 147 永久套餐）。这类套餐不按月清零流量，没有月付或年付的强制续费周期，只要额度未消耗完即可终身随时调用，非常适合经常出差或作为主力线路故障时的长效备用。"
+              },
+              {
+                question: "7. 为什么机场节点测速速度很快，但看 YouTube 还是频繁缓冲转圈？",
+                answer: "这通常是因为丢包率过高或节点落地与 YouTube CDN 缓存节点之间的路由较差。测速工具往往通过多线程并发把瞬间带宽跑满，但视频播放高度依赖单线程稳定低丢包。若节点丢包率超过 10%，TCP 拥塞算法会迅速将传输窗口缩小，导致 4K 视频无法稳定缓冲。"
+              },
+              {
+                question: "8. 订阅链接泄露给别人会导致什么后果？如何自救？",
+                answer: "订阅链接包含您的唯一身份 Token。他人获取后可以完整导入节点并共享您的流量配额，可能迅速将您的月度流量耗尽。自救方法非常简单：立即登录该机场用户中心，在「我的订阅」或安全设置中点击「重置订阅链接（Reset Token）」，旧链接即刻失效，然后在本地客户端中重新导入新链接。"
+              },
+              {
+                question: "9. 为什么有些节点能看 Netflix 但打不开 ChatGPT？",
+                answer: "两者的风控黑名单库不同。Netflix 主要拦截公网数据中心机房 IP，只要服务商配置了 DNS 解锁或流媒体分流即可观看；而 OpenAI（ChatGPT）对 IP 纯净度的风控更为严厉，会主动识别节点的数据中心特征、IP 欺诈分以及同一 IP 下并发请求数量。如果一个节点同时有数百人在调用 ChatGPT，OpenAI 会直接报错拒绝访问。"
+              },
+              {
+                question: "10. 翻墙工具开启后为什么国内应用（如微信、淘宝、B站）变得很卡或定位错误？",
+                answer: "这是分流规则未正确生效，导致国内流量被错误代理。请确认客户端运行在「Rule（规则分流）」模式而非「Global（全局代理）」，并检查客户端内置的 GeoSite 与 GeoIP 规则数据库是否为最新版本。在标准规则分流下，国内域名与国内 IP 会自动走本地直连，完全不消耗代理流量与延迟。"
+              }
+            ]}
+          />
+        </section>
+
+        <!-- Chapter 8: Verified High-Availability Backups (Affiliate CTA) -->
+        <section id="verified-backups" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 08 // VERIFIED PROVIDERS</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              第八章：经实测验证的高可用备用通道与精选梯队
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">以下服务商经本站测评实验室连续 90 天以上网络稳定性跟踪，线路参数与套餐经事实审计</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+            <BrandCard brand={featuredBrand} />
+            <BrandCard brand={topBrands[1] || topBrands[0]} />
+          </div>
+
+          <!-- Primary Brand Compliant Affiliate CTA -->
+          <BrandAffiliateCTA
+            brand={featuredBrand}
+            customText="资源与情报首推高可用备用方案：光速云（IEPL企业级双专线架构，年付折合¥8/月，提供一次性247GB斯诺克不过期永久包）"
+          />
+
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+            <p><strong>合规与客观中立声明</strong>：本站部分链接包含推广推荐参数（Affiliate Links），用户通过链接注册可能为本站带来维护佣金，但绝不影响用户实付价格。评测结论基于真实采集数据，不因商业合作伪造测速排名。</p>
+            <p>数据核准基准日：2026-11-18。网络工具仅用于跨境合法商务、科研与技术学习，请严格遵守当地法律法规。</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column: Sticky Table of Contents & Sidebar Navigation (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Sticky Table of Contents -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <h3 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-brand-600" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span>本页专著级目录导航</span>
+          </h3>
+
+          <nav class="space-y-1.5 text-xs text-slate-600 font-medium">
+            <a href="#emergency-quick-answer" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 核心速览与应急自救决策表
+            </a>
+            <a href="#topic-matrix" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 资源与情报 7大二级专题矩阵
+            </a>
+            <a href="#scam-and-risk-mechanism" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第一章：机场跑路先兆与成本模型
+            </a>
+            <a href="#free-nodes-security-isolation" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第二章：公共免费节点安全防投毒
+            </a>
+            <a href="#subscription-troubleshooting" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第三章：订阅报错与HTTP故障排查
+            </a>
+            <a href="#node-testing-methodology" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第四章：真连接测速与流媒体解锁
+            </a>
+            <a href="#beginner-security-compliance" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第五章：新手认知架构与合规底线
+            </a>
+            <a href="#decision-tree-path" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第六章：用户决策分支与操作路线
+            </a>
+            <a href="#comprehensive-faq" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第七章：高频疑问与边界问题 FAQ
+            </a>
+            <a href="#verified-backups" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第八章：实测高可用备用方案推荐
+            </a>
+          </nav>
+        </div>
+
+        <!-- 31 Brands Database Fast Access -->
+        <div class="bg-gradient-to-br from-brand-50 to-blue-50/50 rounded-2xl border border-brand-100 p-6 shadow-sm text-xs">
+          <span class="font-bold text-brand-700 uppercase tracking-wider block mb-1">
+            客观数据库索引中心
+          </span>
+          <h4 class="text-base font-bold text-slate-900 mb-2">31家机场参数筛选库</h4>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            已对全网 31 家主流服务商的线路、价格、优惠码与解锁状态完成事实审计，支持多维条件即时过滤。
+          </p>
+          <a
+            href="/brands/"
+            class="block w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center shadow-md shadow-brand-500/20 transition-all"
+          >
+            打开品牌参数筛选器 &rarr;
+          </a>
+        </div>
+
+        <!-- Secondary Topics Direct Links -->
+        <div class="bg-white rounded-2xl border border-surface-border p-5 shadow-sm text-xs">
+          <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-1.5">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            二级专题直达
+          </h4>
+          <div class="space-y-1.5">
+            <a href="/resources/warning/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 跑路预警数据库与前兆识别
+            </a>
+            <a href="/resources/free-nodes/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 免费节点获取与防投毒指引
+            </a>
+            <a href="/resources/subscription-issues/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 订阅拉取失败 403/404 修复
+            </a>
+            <a href="/resources/node-check/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 节点检测与真延迟测速工具
+            </a>
+            <a href="/resources/beginner/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 零基础翻墙扫盲入门指南
+            </a>
+            <a href="/resources/faq/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 机场高频常见问答全集
+            </a>
+            <a href="/resources/risk-intel/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 机场风险情报动态与存活报告
+            </a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>

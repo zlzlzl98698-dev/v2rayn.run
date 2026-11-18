@@ -1,0 +1,48 @@
+# Robots.txt for https://v2rayn.run/
+# Pre-launch Search Engine Infrastructure Configuration
+
+# 1. Google
+User-agent: Googlebot
+Allow: /
+Disallow: /draft/
+Disallow: /404/
+
+# 2. Bing
+User-agent: bingbot
+Allow: /
+Disallow: /draft/
+Disallow: /404/
+
+# 3. Baidu
+User-agent: Baiduspider
+Allow: /
+Disallow: /draft/
+Disallow: /404/
+
+# 4. Shenma (UC / Quark)
+User-agent: yisouspider
+Allow: /
+Disallow: /draft/
+Disallow: /404/
+
+# 5. Sogou
+User-agent: Sogouspider
+Allow: /
+Disallow: /draft/
+Disallow: /404/
+
+# 6. 360 Search
+User-agent: 360Spider
+Allow: /
+Disallow: /draft/
+Disallow: /404/
+
+# 7. Default for all other crawlers
+User-agent: *
+Allow: /
+Disallow: /draft/
+Disallow: /404/
+
+# XML Sitemap Declarations (Standard + Index)
+Sitemap: https://v2rayn.run/sitemap.xml
+Sitemap: https://v2rayn.run/sitemap-index.xml

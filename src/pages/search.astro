@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import { brands } from '../data/brands';
+
+const quickKeywords = [
+  '光速云',
+  'Clash Verge',
+  'IEPL专线',
+  '跑路预警',
+  '性价比机场',
+  'TUN模式',
+  'Shadowrocket',
+  'VLESS',
+  '免费节点',
+  '超时排查',
+];
+---
+
+<BaseLayout
+  title="站内全文搜索 - 文章、品牌与教程检索 | v2rayn指南"
+  description="v2rayn指南站内全文检索系统，支持对31家机场参数、Clash教程、网络评测与故障排查进行即时精准检索。"
+  canonical="https://v2rayn.run/search/"
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ name: '站内全文搜索' }]} />
+
+    <header class="my-6">
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">
+        站内全文搜索中心
+      </h1>
+      <p class="text-sm text-slate-500 mt-2">
+        输入任意关键词检索相关原创文章、品牌深度评测、客户端下载教程与风险预警。
+      </p>
+
+      <!-- Quick Keywords -->
+      <div class="flex flex-wrap items-center gap-2 mt-4 text-xs">
+        <span class="text-slate-400 font-medium">热门搜索词：</span>
+        {quickKeywords.map((kw) => (
+          <button
+            type="button"
+            class="search-tag-pill px-3 py-1 rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand-600 text-slate-600 font-medium transition-colors"
+            data-kw={kw}
+          >
+            {kw}
+          </button>
+        ))}
+      </div>
+    </header>
+
+    <!-- Pagefind Container -->
+    <div class="bg-white rounded-3xl border border-surface-border p-6 sm:p-8 shadow-sm my-8 min-h-[400px]">
+      <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+      <div id="pagefind-search"></div>
+      <script src="/pagefind/pagefind-ui.js" is:inline></script>
+      
+      <script is:inline>
+        window.addEventListener('DOMContentLoaded', () => {
+          if (typeof PagefindUI !== 'undefined') {
+            const ui = new PagefindUI({
+              element: '#pagefind-search',
+              showSubResults: true,
+              showImages: false,
+              translations: {
+                placeholder: '输入关键词搜索 (例如: 光速云, Verge, 专线)...',
+                zero_results: '未检索到相关内容，请尝试更简短的关键词',
+                many_results: '找到 [COUNT] 条相关内容',
+                one_result: '找到 1 条相关内容',
+                searching: '正在检索全文索引库...',
+              }
+            });
+
+            // Handle URL query parameter 'q'
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q');
+            if (query) {
+              const input = document.querySelector('#pagefind-search input');
+              if (input) {
+                input.value = query;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+              }
+            }
+
+            // Quick keyword pill clicks
+            document.querySelectorAll('.search-tag-pill').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const kw = btn.getAttribute('data-kw');
+                const input = document.querySelector('#pagefind-search input');
+                if (input && kw) {
+                  input.value = kw;
+                  input.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+              });
+            });
+          }
+        });
+      </script>
+    </div>
+
+    <!-- Fallback Brand Quick Search -->
+    <div class="mt-12 pt-8 border-t border-slate-200">
+      <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+        <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+        快捷品牌索引直达
+      </h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        {brands.slice(0, 12).map((b) => (
+          <a
+            href={`/brands/${b.slug}/`}
+            class="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-brand-300 hover:text-brand-600 font-medium flex items-center justify-between"
+          >
+            <span>{b.name}</span>
+            <span class="text-slate-400 text-[10px]">#{b.rank}</span>
+          </a>
+        ))}
+      </div>
+      <div class="mt-4 text-center">
+        <a href="/brands/" class="text-xs font-bold text-brand-600 hover:underline">
+          查看全部 31 家机场品牌详细数据库 &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

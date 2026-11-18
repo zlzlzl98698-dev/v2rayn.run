@@ -1,0 +1,45 @@
+---
+import type { Brand } from '../../types/brand';
+
+interface Props {
+  brand: Brand;
+}
+
+const { brand } = Astro.props;
+---
+
+<div class="bg-slate-950 text-slate-100 rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl my-6 font-mono text-xs">
+  <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-violet-400"></span>
+      <span class="font-bold text-slate-200 tracking-wide uppercase">
+        Infrastructure Snapshot // {brand.name}
+      </span>
+    </div>
+    <span class="text-slate-400 text-[11px]">Rank #{brand.rank}</span>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
+    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+      <span class="text-slate-400 block text-[10px] uppercase">线路类型</span>
+      <span class="font-bold text-emerald-400 text-sm mt-0.5 block truncate">{brand.lineType}</span>
+    </div>
+    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+      <span class="text-slate-400 block text-[10px] uppercase">传输协议</span>
+      <span class="font-bold text-sky-400 text-sm mt-0.5 block truncate">{brand.protocols.join(', ')}</span>
+    </div>
+    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+      <span class="text-slate-400 block text-[10px] uppercase">入门月均价</span>
+      <span class="font-bold text-amber-400 text-sm mt-0.5 block truncate">{brand.startingPrice}</span>
+    </div>
+    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+      <span class="text-slate-400 block text-[10px] uppercase">专属优惠码</span>
+      <span class="font-bold text-violet-400 text-sm mt-0.5 block truncate">{brand.couponCode || '无优惠码'}</span>
+    </div>
+  </div>
+
+  <div class="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] text-slate-400">
+    <span>核实状态: {brand.dataStatus === 'verified' ? '已核对真实价目表与测速' : '品牌方宣称数据'}</span>
+    <span>最后更新: {brand.updatedDate}</span>
+  </div>
+</div>

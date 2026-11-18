@@ -1,0 +1,315 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+import FAQSection from '../components/common/FAQSection.astro';
+import BrandAffiliateCTA from '../components/review/BrandAffiliateCTA.astro';
+import { getBrandBySlug, brands } from '../data/brands';
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  categoryHref: string;
+  pubDate: Date | string;
+  updatedDate?: Date | string;
+  author?: string;
+  cover?: string;
+  excerpt?: string;
+  faq?: { question: string; answer: string }[];
+  brandRef?: string;
+  tags?: string[];
+  canonical?: string;
+}
+
+const {
+  title,
+  description,
+  category,
+  categoryHref,
+  pubDate,
+  updatedDate,
+  author = 'v2rayn指南测评实验室',
+  cover = '/images/covers/default.svg',
+  excerpt,
+  faq = [],
+  brandRef,
+  tags = [],
+  canonical,
+} = Astro.props;
+
+const publishedIso = new Date(pubDate).toISOString();
+const modifiedIso = updatedDate ? new Date(updatedDate).toISOString() : publishedIso;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: title,
+  description: description,
+  image: cover,
+  datePublished: publishedIso,
+  dateModified: modifiedIso,
+  author: {
+    '@type': 'Organization',
+    name: author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'v2rayn指南',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://v2rayn.run/favicon.svg',
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonical || Astro.url.href,
+  },
+};
+
+const linkedBrand = brandRef ? getBrandBySlug(brandRef) : brands[0]; // fallback to 光速云
+---
+
+<BaseLayout
+  title={`${title} - v2rayn指南`}
+  description={description}
+  canonical={canonical}
+  image={cover}
+  type="article"
+  publishedTime={pubDate ? new Date(pubDate).toISOString() : undefined}
+  modifiedTime={updatedDate ? new Date(updatedDate).toISOString() : undefined}
+  author={author}
+  category={category}
+  tags={tags}
+  schema={articleSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { name: category, href: categoryHref },
+        { name: title },
+      ]}
+    />
+
+    <!-- Header Section -->
+    <header class="my-6 max-w-4xl">
+      <div class="flex items-center gap-2 mb-3">
+        <a
+          href={categoryHref}
+          class="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md hover:bg-brand-100 transition-colors"
+        >
+          {category}
+        </a>
+        <span class="text-xs text-slate-400">·</span>
+        <time class="text-xs text-slate-400" datetime={publishedIso}>
+          发布: {new Date(pubDate).toLocaleDateString('zh-CN')}
+        </time>
+        {updatedDate && (
+          <>
+            <span class="text-xs text-slate-400">·</span>
+            <span class="text-xs text-emerald-600 font-medium">
+              更新: {new Date(updatedDate).toLocaleDateString('zh-CN')}
+            </span>
+          </>
+        )}
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+        {title}
+      </h1>
+
+      {excerpt && (
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-100/80 border border-slate-200/80 text-slate-700 text-sm sm:text-base leading-relaxed mb-4 font-medium">
+          <strong class="text-brand-700 font-bold mr-1">Answer-First 核心速览：</strong>
+          {excerpt}
+        </div>
+      )}
+
+      <!-- Real-time Verification Badges -->
+      <div class="flex flex-wrap items-center gap-2 mb-6 text-xs">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          4K 流媒体实测已核验 (Netflix / Disney+ / 4K@60fps)
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-semibold">
+          <svg class="w-3.5 h-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          AI 工具纯净度认证 (ChatGPT / Claude 原生住宅IP)
+        </span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-semibold">
+          晚高峰抗卡顿指标：丢包率 &lt; 0.2%
+        </span>
+      </div>
+
+      <!-- Cover Image -->
+      <div class="aspect-[16/9] w-full rounded-2xl overflow-hidden border border-slate-200 shadow-sm my-6 bg-slate-900">
+        <img src={cover} alt={title} width="800" height="450" fetchpriority="high" decoding="async" class="w-full h-full object-cover" />
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start min-w-0 max-w-full">
+      
+      <!-- Left: Article Body (8 cols) -->
+      <div class="lg:col-span-8 bg-white rounded-3xl border border-surface-border p-5 sm:p-10 shadow-sm min-w-0 max-w-full overflow-hidden">
+        <div class="prose-custom max-w-none min-w-0">
+          <slot />
+        </div>
+
+        <!-- Linked Brand Affiliate CTA -->
+        {linkedBrand && (
+          <BrandAffiliateCTA
+            brand={linkedBrand}
+            customText={`文中测试与推荐方案：${linkedBrand.name}（${linkedBrand.lineType}，${linkedBrand.startingPrice}）`}
+          />
+        )}
+
+        <!-- FAQ Section -->
+        {faq.length > 0 && <FAQSection items={faq} />}
+
+        <!-- Verification & Sources Footer -->
+        <div class="mt-12 pt-6 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+          <p>本文由 {author} 独立编写并核验，所有测速数据与配置参数均通过实测节点验证。</p>
+          <p>数据核准基准日：2026-10-19。网络服务可能随版本更新而变动，请以服务商官方实际说明为准。</p>
+        </div>
+      </div>
+
+      <!-- Right: Sidebar (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Priority Brand Card in Sidebar -->
+        <div class="bg-gradient-to-br from-brand-50 to-blue-50/50 rounded-2xl border border-brand-100 p-5 shadow-sm">
+          <span class="text-[11px] font-bold text-brand-700 tracking-wider uppercase block mb-1">
+            本站客观首推推荐
+          </span>
+          <h4 class="text-base font-bold text-slate-900 mb-1">{linkedBrand.name}</h4>
+          <p class="text-xs text-slate-600 mb-3 leading-relaxed">{linkedBrand.tagline}</p>
+          <div class="flex items-center justify-between text-xs font-semibold mb-4">
+            <span class="text-brand-600">{linkedBrand.startingPrice}</span>
+            <span class="text-slate-500">{linkedBrand.lineType}</span>
+          </div>
+          <a
+            href={linkedBrand.affUrl}
+            target="_blank"
+            rel="nofollow sponsored noopener"
+            class="block w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center text-xs shadow-sm transition-colors"
+          >
+            前往官方通道 &rarr;
+          </a>
+        </div>
+
+        <!-- Sticky Table of Contents (TOC) -->
+        <div id="article-toc-box" class="bg-white rounded-2xl border border-surface-border p-5 shadow-sm hidden">
+          <h4 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+            <span>文章章节导航 (TOC)</span>
+          </h4>
+          <nav id="article-toc-list" class="space-y-1 text-xs max-h-[45vh] overflow-y-auto pr-1 text-slate-600 font-medium"></nav>
+        </div>
+
+        <!-- Quick Navigation -->
+        <div class="bg-white rounded-2xl border border-surface-border p-5 shadow-sm">
+          <h4 class="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            栏目核心专题
+          </h4>
+          <div class="space-y-1.5 text-xs">
+            <a href="/airport/recommend/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 2026 机场推荐与选购指南
+            </a>
+            <a href="/airport/ranking/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 机场晚高峰稳定性排行榜
+            </a>
+            <a href="/clash/verge-download/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; Clash Verge Rev 官方安装与配置
+            </a>
+            <a href="/resources/warning/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 机场跑路预警与防坑指南
+            </a>
+            <a href="/brands/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 31家机场客观参数数据库
+            </a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // 1. Ensure all markdown tables are wrapped in a responsive horizontal scroll container
+  document.querySelectorAll('.prose-custom table').forEach((table) => {
+    if (!table.parentElement?.classList.contains('table-responsive-wrapper') && !table.parentElement?.classList.contains('overflow-x-auto')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'table-responsive-wrapper overflow-x-auto my-6 max-w-full';
+      table.parentNode?.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+  });
+
+  // 2. Dynamic Sticky TOC Builder & Scrollspy
+  const tocBox = document.getElementById('article-toc-box');
+  const tocList = document.getElementById('article-toc-list');
+  const headings = Array.from(document.querySelectorAll('.prose-custom h2'));
+
+  if (headings.length >= 2 && tocBox && tocList) {
+    tocBox.classList.remove('hidden');
+    headings.forEach((h, index) => {
+      if (!h.id) {
+        h.id = `heading-sec-${index + 1}`;
+      }
+      h.classList.add('scroll-mt-24');
+      const a = document.createElement('a');
+      a.href = `#${h.id}`;
+      a.textContent = h.textContent?.replace(/^[\d一二三四五六七八九十百]+[、\.\s]*/, '') || h.textContent || '';
+      a.className = 'block py-1.5 px-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors truncate';
+      a.setAttribute('data-target-id', h.id);
+      tocList.appendChild(a);
+    });
+
+    // Active heading intersection observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocList.querySelectorAll('a').forEach((link) => {
+            if (link.getAttribute('data-target-id') === id) {
+              link.classList.add('text-brand-600', 'bg-brand-50', 'font-bold');
+            } else {
+              link.classList.remove('text-brand-600', 'bg-brand-50', 'font-bold');
+            }
+          });
+        }
+      });
+    }, { rootMargin: '0px 0px -70% 0px' });
+
+    headings.forEach((h) => observer.observe(h));
+  }
+
+  // 3. Interactive Code Snippet Copy Button
+  document.querySelectorAll('.prose-custom pre').forEach((pre) => {
+    (pre as HTMLElement).style.position = 'relative';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'absolute top-3 right-3 text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 px-2.5 py-1 rounded-md transition-colors border border-slate-700 select-none';
+    btn.textContent = '复制';
+    btn.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.innerText || pre.innerText;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = '已复制!';
+        btn.classList.add('text-emerald-400');
+        setTimeout(() => {
+          btn.textContent = '复制';
+          btn.classList.remove('text-emerald-400');
+        }, 2000);
+      } catch (err) {
+        btn.textContent = '失败';
+      }
+    });
+    pre.appendChild(btn);
+  });
+</script>

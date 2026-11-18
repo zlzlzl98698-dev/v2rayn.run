@@ -1,0 +1,20 @@
+---
+import BrandLayout from '../../layouts/BrandLayout.astro';
+import { brands } from '../../data/brands';
+import type { Brand } from '../../types/brand';
+
+export async function getStaticPaths() {
+  return brands.map((brand) => ({
+    params: { slug: brand.slug },
+    props: { brand },
+  }));
+}
+
+interface Props {
+  brand: Brand;
+}
+
+const { brand } = Astro.props;
+---
+
+<BrandLayout brand={brand} />

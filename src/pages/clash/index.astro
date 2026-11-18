@@ -1,0 +1,466 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import TopicCard from '../../components/cards/TopicCard.astro';
+import BrandCard from '../../components/cards/BrandCard.astro';
+import BrandAffiliateCTA from '../../components/review/BrandAffiliateCTA.astro';
+import FAQSection from '../../components/common/FAQSection.astro';
+import { getFeaturedBrands, getTopBrands, brands } from '../../data/brands';
+import { navigationData } from '../../data/navigation';
+import clashContent from '../../data/clash_content.json';
+import clashFaqs from '../../data/clash_faqs.json';
+
+const featuredBrand = getFeaturedBrands()[0] || brands[0]; // 光速云
+const topBrands = getTopBrands(3);
+
+const clashNav = navigationData.find(n => n.id === 'clash');
+const subtopics = clashNav ? clashNav.items : [];
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'Clash 客户端全平台指南：Clash Verge Rev、Mihomo内核、TUN模式与分流配置专著',
+  description: 'v2rayn指南测评实验室权威出品：深度解析Clash客户端生态演进、Windows/macOS/Android/iOS全平台选型对比表、Clash Verge Rev官方安全下载渠道、TUN虚拟网卡全流量接管、Fake-IP防DNS污染与故障排查全流程。',
+  author: {
+    '@type': 'Organization',
+    name: 'v2rayn指南测评实验室',
+    url: 'https://v2rayn.run/'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'v2rayn指南',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://v2rayn.run/favicon.webp'
+    }
+  },
+  datePublished: '2026-10-18T08:00:00+08:00',
+  dateModified: '2026-11-18T18:55:00+08:00',
+  mainEntityOfPage: 'https://v2rayn.run/clash/'
+};
+---
+
+<BaseLayout
+  title="Clash 客户端全平台指南：Clash Verge Rev、Mihomo内核、TUN模式与分流配置专著 (2026最新) | v2rayn指南"
+  description="v2rayn指南测评实验室权威出品：全景式解析2026年Clash客户端生态演进、全平台主流客户端横向对比表、官方安全下载渠道避坑、TUN虚拟网卡接管、Fake-IP防污染与分流排障教程。"
+  canonical="https://v2rayn.run/clash/"
+  schema={pageSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ name: 'Clash 客户端' }]} />
+
+    <!-- Hero Header -->
+    <header class="mt-4 mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-semibold mb-4">
+        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        一级主题门户 // 专著级知识库
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+        Clash 客户端
+      </h1>
+      <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-4xl leading-relaxed">
+        提供 Windows、macOS、Android、iOS 全平台官方安全下载源、Clash Verge Rev 现代化设置、Mihomo (Clash.Meta) 内核进阶特性、TUN 虚拟网卡模式与故障彻底排查指南。
+      </p>
+    </header>
+
+    <!-- Two-Column Main Layout: 8 cols content + 4 cols sticky sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      
+      <!-- Left Column: Core Rich Technical Content (8 cols) -->
+      <div class="lg:col-span-8 space-y-12">
+
+        <!-- Answer-First Executive Summary Box -->
+        <section id="answer-first" class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-3xl border border-amber-200/80 p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/20">
+              ⚡
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                核心结论速览：2026 全平台 Clash 选型 30 秒速决指南
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">面向各操作系统设备、安装渠道防钓鱼与核心配置的第一响应指引</p>
+            </div>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-sm" set:html={clashContent.answerFirst} />
+
+          <div class="mt-6 pt-5 border-t border-amber-200/60">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              全平台主流 Clash 系列客户端核心技术参数横向对比
+            </h3>
+            <div set:html={clashContent.table1Overview} />
+          </div>
+        </section>
+
+        <!-- Topic Matrix Section (7 Subtopics) -->
+        <section id="topic-matrix" class="bg-slate-50 rounded-3xl border border-surface-border p-6 sm:p-8">
+          <div class="border-b border-slate-200 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">TOPIC MATRIX // 7 SUBTOPICS</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              Clash 客户端 核心专题矩阵（7个二级专题）
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">涵盖客户端选型推荐、下载安装、订阅管理、Mihomo内核、图文教程与故障排查</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {subtopics.map(t => (
+              <a
+                href={t.href}
+                class="group flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-surface-border hover:border-brand-500 hover:shadow-md transition-all duration-200"
+              >
+                <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-sm shrink-0 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                  &rarr;
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+                    {t.title}
+                  </h3>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                    {t.description}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <!-- Chapter 1: Ecosystem & Mihomo Kernel -->
+        <section id="ecosystem-evolution" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 01 // KERNEL ARCHITECTURE</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第一章：Clash 客户端生态演进史与 Mihomo (Clash.Meta) 技术革命
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={clashContent.chap1Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/clash/meta/" class="text-brand-600 hover:underline">&bull; Mihomo内核特性全解</a>
+              <a href="/clash/verge/" class="text-brand-600 hover:underline">&bull; Clash Verge Rev特性</a>
+              <a href="/articles/clash-verge-rev-complete-guide/" class="text-brand-600 hover:underline">&bull; Verge超详尽使用指南</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 2: Safe Download Channels -->
+        <section id="download-security" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 02 // SECURITY & RELEASES</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第二章：全平台客户端官方安全下载渠道与防钓鱼鉴别指南
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={clashContent.chap2Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/clash/verge-download/" class="text-brand-600 hover:underline">&bull; Verge官方安全下载专页</a>
+              <a href="/clash/recommend/" class="text-brand-600 hover:underline">&bull; 全平台客户端横向推荐</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 3: Routing & Policy Groups -->
+        <section id="routing-and-policy" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 03 // TRAFFIC SPLITTING</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第三章：分流规则系统底层工作原理：Direct、Proxy 与策略组构建
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={clashContent.chap3Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/clash/verge-subscription/" class="text-brand-600 hover:underline">&bull; 订阅导入与规则配置</a>
+              <a href="/clash/tutorial/" class="text-brand-600 hover:underline">&bull; 全步骤图文教程</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 4: TUN Mode Deep Dive -->
+        <section id="tun-mode-mechanics" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 04 // VIRTUAL NETWORK ADAPTER</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第四章：TUN 虚拟网卡模式底层机理解析与全流量接管配置
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={clashContent.chap4Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/clash/troubleshooting/" class="text-brand-600 hover:underline">&bull; TUN报错排查全解</a>
+              <a href="/comparisons/iepl-vs-iplc-vs-bgp-explained/" class="text-brand-600 hover:underline">&bull; 专线底层物理链路原理</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 5: DNS & Fake-IP -->
+        <section id="dns-fakeip-security" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 05 // DNS RESILIENCE & FAKE-IP</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第五章：DNS 污染防范、Fake-IP 机制与防 DNS 泄漏深度配置
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={clashContent.chap5Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/resources/subscription-issues/" class="text-brand-600 hover:underline">&bull; 订阅报错代码彻底排查</a>
+              <a href="/resources/node-check/" class="text-brand-600 hover:underline">&bull; 节点真连接延时工具</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 6: Operations & Deployment -->
+        <section id="operational-walkthrough" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 06 // DEPLOYMENT RUNBOOK</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第六章：桌面端高频实操路线：从零安装到 4K 秒开全流程
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={clashContent.chap6Operations} />
+        </section>
+
+        <!-- Chapter 7: Deep Troubleshooting Runbook -->
+        <section id="troubleshooting-runbook" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 07 // COMMANDS & TROUBLESHOOTING</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第七章：Clash 客户端深层故障自诊断与自救指令库
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={clashContent.chap7Troubleshooting} />
+        </section>
+
+        <!-- Decision Tree Section -->
+        <section id="decision-tree-path" class="bg-gradient-to-br from-slate-900 to-slate-950 text-slate-100 rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800">
+          <div class="border-b border-slate-800 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block mb-1">DECISION LOGIC // ACTION PATHS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              第八章：用户决策分支与全平台实操路线图
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">根据具体操作系统与核心使用场景，直接沿分支执行最优化方案</p>
+          </div>
+
+          <div class="space-y-6 text-xs sm:text-sm font-mono leading-relaxed">
+            <!-- Branch 1 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-emerald-400 text-base mb-2">分支一：Windows 电脑小白用户，追求稳定看 4K 视频与学术查资料</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>访问 GitHub 官方 Releases 仓库，下载 <code class="text-sky-300">Clash.Verge_x.x.x_x64-setup.exe</code> 完成安装；</li>
+                <li>在设置中将语言切换为中文，进入「设置 -> 内核」确认使用默认的 Mihomo 内核；</li>
+                <li>在「订阅」页面粘贴机场提供的 Clash 格式订阅 URL，点击「导入」；</li>
+                <li>在「代理」页面将模式保持在「规则（Rule）」，策略组选择延迟测试最低的香港或日本专线；</li>
+                <li>开启「系统代理」开关，即刻秒开 4K 视频并正常访问学术科研数据库。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 2 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-sky-400 text-base mb-2">分支二：跨国外贸、跨境电商与 AI 生产力业务的高防风控环境配置</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>客户端选型：必须选用支持 TUN 虚拟网卡全流量接管的 Clash Verge Rev；</li>
+                <li>安装 Wintun 驱动服务模式，开启 TUN 模式，确保命令行终端与桌面环境无死角代理；</li>
+                <li>节点类型选择：坚决避免普通公网广播 IP，选用标注有「原生住宅 IP / 纯净 IP」标签的 IEPL 专线；</li>
+                <li>浏览器防穿透：安装 WebRTC Control 扩展彻底关闭 WebRTC 真实 IP 泄漏；</li>
+                <li>策略组设置：针对 OpenAI、PayPal 域名绑定固定的出口节点，防止频繁跳 IP 导致封号。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 3 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-amber-400 text-base mb-2">分支三：Mac 苹果笔记本用户，追求极低功耗与无缝休眠唤醒</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>进入 GitHub 下载带有 <code class="text-sky-300">aarch64.dmg</code> 标志的安装包（适配 Apple Silicon 芯片）；</li>
+                <li>拖入「应用程序」文件夹，首次打开若提示未经签名，在「系统设置 -> 隐私与安全性」中点击「仍要打开」；</li>
+                <li>开启设置中的「开机自启动」与「静默启动」，配置定时每 24 小时自动更新订阅；</li>
+                <li>合上笔记本盖子休眠唤醒后，Tauri 原生架构无需重启进程即可在 1 秒内无感恢复连通。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 4 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-purple-400 text-base mb-2">分支四：Android 手机用户，需要精确的分应用代理配置</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>下载安装 Clash Meta for Android 最新 Release APK；</li>
+                <li>导入订阅配置并激活，进入「配置 -> 应用分流」开关；</li>
+                <li>勾选「仅代理选中的应用」，将 Chrome、YouTube、Telegram、Twitter 勾选，国内微信、支付宝保持直连；</li>
+                <li>有效杜绝后台无谓唤醒与无效流量消耗，大幅延长手机全天续航时间。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 5 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-rose-400 text-base mb-2">分支五：软路由 / 局域网透明代理部署与全屋无感翻墙</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>网络设备选型：采用 x86 工控机或友善 NanoPi 软路由，部署 OpenClash 或 HomeProxy；</li>
+                <li>核心模式配置：推荐开启 Meta 内核的 Fake-IP (TUN 混合模式)，将网关 IP 指向软路由；</li>
+                <li>上游 DNS 搭配：接入 MosDNS 或 AdGuard Home，实现国内外 DNS 精准分流与广告过滤；</li>
+                <li>终端体验：全屋电视盒子（Apple TV、Google TV）、手机电脑免装客户端，开机即秒开 4K。</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 9: Exhaustive FAQ -->
+        <section id="comprehensive-faq" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <FAQSection
+            title="第九章：Clash 客户端 12大高频疑问深度 FAQ"
+            headingLevel="h2"
+            items={clashFaqs}
+          />
+        </section>
+
+        <!-- Chapter 10: Verified High-Availability Backups (Affiliate CTA) -->
+        <section id="verified-backups" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 10 // VERIFIED COMPATIBILITY</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              第十章：Clash 客户端深度兼容与实测推荐梯队
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">以下服务商经本站测评实验室连续 90 天以上网络稳定性跟踪，完美原生支持 Clash YAML 与 Mihomo 协议</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+            <BrandCard brand={featuredBrand} />
+            <BrandCard brand={topBrands[1] || topBrands[0]} />
+          </div>
+
+          <!-- Primary Brand Compliant Affiliate CTA -->
+          <BrandAffiliateCTA
+            brand={featuredBrand}
+            customText="Clash 客户端首选高可用配置方案：光速云（IEPL企业级双专线架构，年付折合¥8/月，支持一键导入Clash Verge与致敬斯诺克147永久不过期包）"
+          />
+
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+            <p><strong>合规与客观中立声明</strong>：本站部分链接包含推广推荐参数（Affiliate Links），用户通过链接注册可能为本站带来维护佣金，但绝不影响用户实付价格。评测结论基于真实采集数据，不因商业合作伪造测速排名。</p>
+            <p>数据核准基准日：2026-11-18。网络工具仅用于跨境合法商务、科研与技术学习，请严格遵守当地法律法规。</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column: Sticky Table of Contents & Navigation (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Sticky Table of Contents -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <h3 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-brand-600" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span>本页专著级目录导航</span>
+          </h3>
+
+          <nav class="space-y-1.5 text-xs text-slate-600 font-medium">
+            <a href="#answer-first" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 核心速览与全平台选型表
+            </a>
+            <a href="#topic-matrix" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; Clash 客户端 7大二级专题矩阵
+            </a>
+            <a href="#ecosystem-evolution" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第一章：生态演进与Mihomo内核
+            </a>
+            <a href="#download-security" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第二章：官方下载防钓鱼指南
+            </a>
+            <a href="#routing-and-policy" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第三章：分流规则与策略组构建
+            </a>
+            <a href="#tun-mode-mechanics" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第四章：TUN虚拟网卡全流量接管
+            </a>
+            <a href="#dns-fakeip-security" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第五章：DNS防污染与Fake-IP
+            </a>
+            <a href="#operational-walkthrough" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第六章：4K秒开实操运行手册
+            </a>
+            <a href="#troubleshooting-runbook" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第七章：网络死锁排障指令库
+            </a>
+            <a href="#decision-tree-path" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第八章：用户决策分支与操作路线
+            </a>
+            <a href="#comprehensive-faq" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第九章：高频疑问与边界问题 FAQ
+            </a>
+            <a href="#verified-backups" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第十章：实测高可用专线与精选梯队
+            </a>
+          </nav>
+        </div>
+
+        <!-- 31 Brands Database Fast Access -->
+        <div class="bg-gradient-to-br from-brand-50 to-blue-50/50 rounded-2xl border border-brand-100 p-6 shadow-sm text-xs">
+          <span class="font-bold text-brand-700 uppercase tracking-wider block mb-1">
+            客观数据库索引中心
+          </span>
+          <h4 class="text-base font-bold text-slate-900 mb-2">31家机场参数筛选库</h4>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            已对全网 31 家主流服务商的线路、价格、优惠码与解锁状态完成事实审计，支持多维条件即时过滤。
+          </p>
+          <a
+            href="/brands/"
+            class="block w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center shadow-md shadow-brand-500/20 transition-all"
+          >
+            打开品牌参数筛选器 &rarr;
+          </a>
+        </div>
+
+        <!-- Secondary Topics Direct Links -->
+        <div class="bg-white rounded-2xl border border-surface-border p-5 shadow-sm text-xs">
+          <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-1.5">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            Clash 客户端 二级专题直达
+          </h4>
+          <div class="space-y-1.5">
+            <a href="/clash/recommend/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 全平台 Clash 客户端推荐榜
+            </a>
+            <a href="/clash/verge/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; Clash Verge Rev 功能全解析
+            </a>
+            <a href="/clash/verge-download/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 官方安全下载源与安装避坑
+            </a>
+            <a href="/clash/verge-subscription/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 订阅导入与自动更新设置
+            </a>
+            <a href="/clash/meta/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; Mihomo (Clash.Meta) 内核特性
+            </a>
+            <a href="/clash/tutorial/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 全平台图文新手配置教程
+            </a>
+            <a href="/clash/troubleshooting/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 节点超时与TUN报错彻底排查
+            </a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>

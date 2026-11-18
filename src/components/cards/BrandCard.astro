@@ -1,0 +1,104 @@
+---
+import type { Brand } from '../../types/brand';
+
+interface Props {
+  brand: Brand;
+}
+
+const { brand } = Astro.props;
+
+const isVerified = brand.dataStatus === 'verified';
+---
+
+<div class="bg-white rounded-2xl border border-surface-border p-6 card-hover-effect flex flex-col justify-between h-full group relative">
+  {brand.featured && (
+    <div class="absolute -top-3 right-6 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm tracking-wide">
+      综合主推首选
+    </div>
+  )}
+
+  <div>
+    <!-- Top Row: Brand Identity & Rank -->
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center font-black text-lg shadow-sm">
+          {brand.name.slice(0, 1)}
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-xl font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+              <a href={`/brands/${brand.slug}/`}>{brand.name}</a>
+            </h3>
+            {isVerified ? (
+              <span class="inline-flex items-center text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                已实测核准
+              </span>
+            ) : (
+              <span class="inline-flex items-center text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                品牌资料待测
+              </span>
+            )}
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5 font-medium">{brand.lineType}</p>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <span class="text-xs font-bold text-slate-400 block">综合排名</span>
+        <span class="text-xl font-black text-brand-700">#{brand.rank}</span>
+      </div>
+    </div>
+
+    <!-- Tagline -->
+    <p class="text-sm text-slate-600 line-clamp-2 mb-4 leading-relaxed">
+      {brand.tagline}
+    </p>
+
+    <!-- Key Parameters Grid -->
+    <div class="grid grid-cols-2 gap-2 p-3 bg-slate-50/80 rounded-xl text-xs mb-4">
+      <div>
+        <span class="text-slate-400 block">入门价格</span>
+        <span class="font-bold text-slate-800 text-sm text-brand-600">{brand.startingPrice}</span>
+      </div>
+      <div>
+        <span class="text-slate-400 block">协议支持</span>
+        <span class="font-medium text-slate-700">{brand.protocols.slice(0, 2).join(' / ')}</span>
+      </div>
+      <div>
+        <span class="text-slate-400 block">流量跨度</span>
+        <span class="font-medium text-slate-700 truncate">{brand.trafficRange.split('，')[0]}</span>
+      </div>
+      <div>
+        <span class="text-slate-400 block">客户端适配</span>
+        <span class="font-medium text-slate-700">{brand.hasCustomClient ? '自研App+通用' : '第三方通用'}</span>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="flex flex-wrap gap-1.5 mb-5">
+      {brand.tags.slice(0, 4).map((tag) => (
+        <span class="text-[11px] font-medium text-slate-600 bg-white border border-slate-200/80 px-2 py-0.5 rounded-md">
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <!-- Bottom CTA Buttons -->
+  <div class="pt-4 border-t border-slate-100 flex items-center gap-2">
+    <a
+      href={`/brands/${brand.slug}/`}
+      class="flex-1 py-2 px-3 rounded-xl border border-slate-200 text-slate-700 text-center font-semibold text-xs hover:bg-slate-50 hover:border-brand-300 hover:text-brand-600 transition-colors"
+    >
+      客观参数评测
+    </a>
+    <a
+      href={brand.affUrl}
+      target="_blank"
+      rel="nofollow sponsored noopener"
+      class="flex-1 py-2 px-3 rounded-xl bg-brand-600 text-white text-center font-semibold text-xs hover:bg-brand-700 transition-colors shadow-sm shadow-brand-500/20"
+    >
+      前往官方渠道
+    </a>
+  </div>
+</div>

@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import BrandCard from '../../components/cards/BrandCard.astro';
+import { brands } from '../../data/brands';
+
+const databaseSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '2026年31家主流机场品牌客观评测数据库',
+  description: '汇聚31家主流机场客观实测数据、套餐价格、线路类型与AI/流媒体解锁支持度。',
+  itemListElement: brands.map((b, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: b.name,
+    url: `https://v2rayn.run/brands/${b.slug}/`,
+  })),
+};
+---
+
+<BaseLayout
+  title="机场品牌数据库 - 31家主流机场参数筛选与客观实测 | v2rayn指南"
+  description="收录31家主流机场真实客观实测数据：涵盖光速云、暮光加速、飞猫云等品牌。提供按月付价格、IEPL/IPLC专线、VLESS协议、流媒体解锁等多维实时筛选与详细评测报告。"
+  canonical="https://v2rayn.run/brands/"
+  schema={databaseSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ name: '机场品牌数据库' }]} />
+
+    <!-- Hero Header -->
+    <header class="my-6">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold mb-3 border border-brand-200">
+          <span class="w-2 h-2 rounded-full bg-brand-600 animate-ping"></span>
+          实测数据持续更新库 (31家已核验)
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+          机场品牌客观数据库与多维筛选中心
+        </h1>
+        <p class="text-base text-slate-600 mt-3 leading-relaxed">
+          拒绝虚假跑分与夸大神化。本数据库基于真实价目表与独立节点网络测试，提供价格跨度、专线类型、协议兼容与客户端支持的多维度实时筛选。
+        </p>
+      </div>
+
+      <!-- Compliance & Status Alert -->
+      <div class="mt-6 p-4 rounded-2xl bg-slate-100/80 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-600">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-emerald-600 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <span>
+            数据核验规则：绿色标识为通过真实测速验证；黄色标识为品牌方单方宣称；所有外部注册链接均遵循 <code>target="_blank" rel="nofollow sponsored noopener"</code>。
+          </span>
+        </div>
+        <a href="/brands/guangsu/" class="text-brand-600 font-bold hover:underline shrink-0">
+          查看本站主推：光速云评测 &rarr;
+        </a>
+      </div>
+    </header>
+
+    <!-- Interactive Search & Filter Controls -->
+    <section class="bg-white rounded-3xl border border-surface-border p-6 shadow-sm my-8">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        
+        <!-- Keyword Search Input (5 cols) -->
+        <div class="md:col-span-5 relative">
+          <label for="brand-search-input" class="sr-only">搜索品牌名称或别名</label>
+          <input
+            type="text"
+            id="brand-search-input"
+            placeholder="输入品牌名称、别名或协议 (如 光速云, VLESS, 专线)..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition-all bg-slate-50/50"
+          />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+        </div>
+
+        <!-- Filter 1: Line Type (3 cols) -->
+        <div class="md:col-span-3">
+          <select id="filter-line" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-sm text-slate-700 bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+            <option value="all">所有线路架构</option>
+            <option value="IEPL">IEPL 企业专线</option>
+            <option value="IPLC">IPLC 国际专线</option>
+            <option value="BGP">BGP 优质中转</option>
+          </select>
+        </div>
+
+        <!-- Filter 2: Price Bracket (2 cols) -->
+        <div class="md:col-span-2">
+          <select id="filter-price" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-sm text-slate-700 bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+            <option value="all">所有价格区间</option>
+            <option value="budget">¥10 以下平价档</option>
+            <option value="standard">¥10 - ¥25 均衡档</option>
+            <option value="premium">¥25 以上高阶专线</option>
+          </select>
+        </div>
+
+        <!-- Sort Option (2 cols) -->
+        <div class="md:col-span-2">
+          <select id="filter-sort" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 text-sm text-slate-700 bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-brand-500/30 font-semibold text-brand-700">
+            <option value="rank">按综合排名</option>
+            <option value="price-asc">价格: 从低到高</option>
+            <option value="price-desc">价格: 从高到低</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Quick Filter Tags -->
+      <div class="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-slate-100 text-xs">
+        <span class="text-slate-400 font-medium">热门过滤：</span>
+        <button type="button" class="quick-tag-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors" data-filter="all">
+          全部 (31)
+        </button>
+        <button type="button" class="quick-tag-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors" data-filter="IEPL">
+          IEPL专线
+        </button>
+        <button type="button" class="quick-tag-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors" data-filter="VLESS">
+          VLESS协议
+        </button>
+        <button type="button" class="quick-tag-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors" data-filter="custom-app">
+          提供自研App
+        </button>
+        <button type="button" class="quick-tag-btn px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-600 transition-colors" data-filter="verified">
+          已测准认证
+        </button>
+      </div>
+    </section>
+
+    <!-- Brands Grid -->
+    <div id="brands-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      {brands.map((brand) => (
+        <div
+          class="brand-item-wrapper h-full"
+          data-name={brand.name.toLowerCase()}
+          data-slug={brand.slug}
+          data-aliases={(brand.aliases || []).join(' ').toLowerCase()}
+          data-line={brand.lineType}
+          data-protocols={brand.protocols.join(' ')}
+          data-custom-client={brand.hasCustomClient ? 'true' : 'false'}
+          data-status={brand.dataStatus}
+          data-rank={brand.rank}
+          data-price={parseFloat(brand.startingPrice.match(/\d+(\.\d+)?/)?.[0] || '10')}
+        >
+          <BrandCard brand={brand} />
+        </div>
+      ))}
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-16 bg-white rounded-3xl border border-dashed border-slate-300 my-8">
+      <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+      </div>
+      <h3 class="text-base font-bold text-slate-700">没有找到匹配的机场品牌</h3>
+      <p class="text-xs text-slate-400 mt-1">请尝试更换搜索关键词或清除部分筛选条件</p>
+      <button
+        type="button"
+        id="reset-filters-btn"
+        class="mt-4 px-4 py-2 rounded-xl bg-brand-50 text-brand-600 text-xs font-bold hover:bg-brand-100 transition-colors"
+      >
+        重置全部筛选条件
+      </button>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<script>
+  const searchInput = document.getElementById('brand-search-input') as HTMLInputElement | null;
+  const filterLine = document.getElementById('filter-line') as HTMLSelectElement | null;
+  const filterPrice = document.getElementById('filter-price') as HTMLSelectElement | null;
+  const filterSort = document.getElementById('filter-sort') as HTMLSelectElement | null;
+  const grid = document.getElementById('brands-grid');
+  const emptyState = document.getElementById('empty-state');
+  const resetBtn = document.getElementById('reset-filters-btn');
+  const quickTags = document.querySelectorAll('.quick-tag-btn');
+
+  function applyFilters() {
+    if (!grid) return;
+    const items = Array.from(grid.querySelectorAll('.brand-item-wrapper')) as HTMLElement[];
+    const searchVal = searchInput?.value.trim().toLowerCase() || '';
+    const lineVal = filterLine?.value || 'all';
+    const priceVal = filterPrice?.value || 'all';
+    const sortVal = filterSort?.value || 'rank';
+
+    let visibleCount = 0;
+
+    items.forEach((item) => {
+      const name = item.dataset.name || '';
+      const aliases = item.dataset.aliases || '';
+      const line = item.dataset.line || '';
+      const protocols = item.dataset.protocols || '';
+      const customClient = item.dataset.customClient === 'true';
+      const status = item.dataset.status || '';
+      const price = parseFloat(item.dataset.price || '0');
+
+      let matchesSearch = !searchVal || name.includes(searchVal) || aliases.includes(searchVal) || protocols.toLowerCase().includes(searchVal) || line.toLowerCase().includes(searchVal);
+      let matchesLine = lineVal === 'all' || line.includes(lineVal);
+      
+      let matchesPrice = true;
+      if (priceVal === 'budget') matchesPrice = price < 10;
+      else if (priceVal === 'standard') matchesPrice = price >= 10 && price <= 25;
+      else if (priceVal === 'premium') matchesPrice = price > 25;
+
+      const isVisible = matchesSearch && matchesLine && matchesPrice;
+      if (isVisible) {
+        item.style.display = '';
+        visibleCount++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    // Sorting
+    const sortedItems = items.sort((a, b) => {
+      const rankA = parseInt(a.dataset.rank || '999');
+      const rankB = parseInt(b.dataset.rank || '999');
+      const priceA = parseFloat(a.dataset.price || '0');
+      const priceB = parseFloat(b.dataset.price || '0');
+
+      if (sortVal === 'price-asc') return priceA - priceB;
+      if (sortVal === 'price-desc') return priceB - priceA;
+      return rankA - rankB;
+    });
+
+    sortedItems.forEach((item) => grid.appendChild(item));
+
+    if (emptyState) {
+      if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+        grid.classList.add('hidden');
+      } else {
+        emptyState.classList.add('hidden');
+        grid.classList.remove('hidden');
+      }
+    }
+  }
+
+  searchInput?.addEventListener('input', applyFilters);
+  filterLine?.addEventListener('change', applyFilters);
+  filterPrice?.addEventListener('change', applyFilters);
+  filterSort?.addEventListener('change', applyFilters);
+
+  quickTags.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const f = btn.getAttribute('data-filter');
+      if (f === 'all') {
+        if (searchInput) searchInput.value = '';
+        if (filterLine) filterLine.value = 'all';
+        if (filterPrice) filterPrice.value = 'all';
+      } else if (f === 'IEPL' && filterLine) {
+        filterLine.value = 'IEPL';
+      } else if (f === 'VLESS' && searchInput) {
+        searchInput.value = 'VLESS';
+      } else if (f === 'verified' && searchInput) {
+        searchInput.value = '';
+      }
+      applyFilters();
+    });
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    if (filterLine) filterLine.value = 'all';
+    if (filterPrice) filterPrice.value = 'all';
+    if (filterSort) filterSort.value = 'rank';
+    applyFilters();
+  });
+</script>

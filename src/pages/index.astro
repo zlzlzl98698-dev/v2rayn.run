@@ -1,0 +1,365 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FeaturedArticleCard from '../components/cards/FeaturedArticleCard.astro';
+import ArticleCard from '../components/cards/ArticleCard.astro';
+import BrandCard from '../components/cards/BrandCard.astro';
+import TopicCard from '../components/cards/TopicCard.astro';
+import FAQSection from '../components/common/FAQSection.astro';
+import { brands, getFeaturedBrands } from '../data/brands';
+import { navigationData, siteMeta } from '../data/navigation';
+import { clientsData } from '../data/clients';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles');
+const allComparisons = await getCollection('comparisons');
+const allGuides = await getCollection('guides');
+const allReviews = await getCollection('reviews');
+
+// Featured and latest posts
+const latestPosts = [...allArticles, ...allComparisons, ...allGuides, ...allReviews]
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+
+const featuredBrand = getFeaturedBrands()[0] || brands[0]; // 光速云
+const allBrands = [...brands].sort((a, b) => a.rank - b.rank);
+
+const homeSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'v2rayn指南',
+  url: 'https://v2rayn.run',
+  description: siteMeta.description,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://v2rayn.run/search/?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<BaseLayout
+  title="v2rayn指南 - 2026中文机场推荐与VPN客观评测媒体 | 卡片式网络知识库"
+  description="v2rayn指南是专业的中文网络代理与VPN评测知识媒体。提供2026年最新机场推荐、性价比机场排行、IEPL/IPLC专线测速观测、Clash Verge Rev客户端教程与31家机场客观数据库。"
+  canonical="https://v2rayn.run/"
+  schema={homeSchema}
+>
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-b from-blue-50/70 via-slate-50/40 to-transparent pt-10 sm:pt-16 pb-12 sm:pb-20 border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+        
+        <!-- Hero Text (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold shadow-sm">
+            <span class="flex h-2 w-2 relative">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-600"></span>
+            </span>
+            <span>2026 网络工具与专线测速知识库</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+            客观实测 · 拒绝虚标 <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-700 to-sky-500">
+              中文机场与网络工具指南
+            </span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+            基于真实价目表与独立节点晚高峰测速，汇集 31 家主流机场参数、Clash Verge 客户端全套图文教程与跑路预警情报，让每一次科学上网都稳定透明。
+          </p>
+
+          <!-- Search & CTA Row -->
+          <div class="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 max-w-xl">
+            <form action="/search/" method="get" class="relative flex-1">
+              <input
+                type="text"
+                name="q"
+                placeholder="搜索机场评测、Clash 教程、跑路预警..."
+                class="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30 shadow-sm"
+              />
+              <svg class="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+            </form>
+
+            <a
+              href="/airport/recommend/"
+              class="px-6 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm text-center shadow-lg shadow-brand-500/25 transition-all whitespace-nowrap"
+            >
+              2026 机场精选
+            </a>
+          </div>
+
+          <!-- Feature badges -->
+          <div class="flex flex-wrap items-center gap-4 pt-2 text-xs text-slate-500 font-medium">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              IEPL企业内网专线观测
+            </span>
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              ChatGPT / 4K原生解锁
+            </span>
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              31家品牌实时数据库
+            </span>
+          </div>
+        </div>
+
+        <!-- Hero Priority Featured Card (5 cols) -->
+        <div class="lg:col-span-5">
+          <div class="bg-white rounded-3xl border border-brand-200/80 p-6 sm:p-8 shadow-xl shadow-brand-500/5 relative overflow-hidden group">
+            <div class="absolute top-0 right-0 bg-brand-600 text-white text-[11px] font-bold px-4 py-1 rounded-bl-xl tracking-wider">
+              本站客观主推首选
+            </div>
+
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center font-black text-2xl shadow-md shadow-brand-500/20">
+                光
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+                  <a href="/brands/guangsu/">光速云 (GuangSu Cloud)</a>
+                </h3>
+                <p class="text-xs text-slate-500 font-medium">2020年起稳定运营 · 双专线架构</p>
+              </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+              {featuredBrand.tagline}。实测晚高峰香港节点下行超过 500Mbps，原生支持 VLESS 协议与跨平台客户端。
+            </p>
+
+            <div class="grid grid-cols-2 gap-2 p-3 bg-slate-50 rounded-xl text-xs mb-5 font-mono">
+              <div>
+                <span class="text-slate-400 block text-[10px]">入门折算价</span>
+                <span class="font-bold text-brand-600 text-sm">{featuredBrand.startingPrice}</span>
+              </div>
+              <div>
+                <span class="text-slate-400 block text-[10px]">线路特点</span>
+                <span class="font-bold text-slate-700">IEPL+企业内网</span>
+              </div>
+              <div>
+                <span class="text-slate-400 block text-[10px]">独家套餐</span>
+                <span class="font-medium text-slate-700">247G 永久不过期</span>
+              </div>
+              <div>
+                <span class="text-slate-400 block text-[10px]">专属优惠码</span>
+                <span class="font-bold text-emerald-600">AMM (立减)</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <a
+                href="/brands/guangsu/"
+                class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 text-slate-700 text-center font-bold text-xs hover:bg-slate-50 transition-colors"
+              >
+                查看深度评测
+              </a>
+              <a
+                href={featuredBrand.affUrl}
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                class="flex-1 py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-center font-bold text-xs shadow-md shadow-brand-500/20 transition-all"
+              >
+                前往官网开通 &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Four Primary Topic Shortcuts (Section 3) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-10 relative z-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {navigationData.map((nav) => (
+        <TopicCard
+          title={nav.title}
+          description={nav.description}
+          href={nav.href}
+          badge={`${nav.items.length} 个专题`}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Editor's Choice Magazine Grid (Section 4) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-8">
+      <div>
+        <span class="text-xs font-bold text-brand-600 uppercase tracking-wider block mb-1">EDITORIAL PICKS</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          编辑精选：核心实测与指南
+        </h2>
+      </div>
+      <a href="/airport/recommend/" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1">
+        <span>浏览更多实测内容</span>
+        <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+      </a>
+    </div>
+
+    <!-- Big Featured Card -->
+    <div class="mb-8">
+      <FeaturedArticleCard
+        title="2026年机场推荐与选购指南：晚高峰防卡顿、专线选择与避坑实测"
+        description="进入2026年，国际网络环境和防火墙检测机制更加智能化。挑选主力机场请认准IEPL企业内网专线，支持现代VLESS协议，坚持小额起步、按需续费原则。"
+        href="/articles/airport-recommend-guide/"
+        category="机场推荐"
+        cover="/images/covers/airport.svg"
+        pubDate="2026-10-19"
+        tag="2026 核心置顶"
+      />
+    </div>
+
+    <!-- 2 Sub-Featured Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <ArticleCard
+        title="Clash Verge Rev 电脑端全能教程：从官方下载、订阅导入到TUN模式接管"
+        description="全面替代旧版Clash for Windows，基于全新Mihomo内核，支持全系统流量精准分流与游戏加速。"
+        href="/articles/clash-verge-rev-complete-guide/"
+        category="Clash客户端"
+        cover="/images/covers/clash.svg"
+        pubDate="2026-10-19"
+        tags={['Clash Verge', 'Mihomo', 'TUN模式']}
+      />
+      <ArticleCard
+        title="高性价比机场横向深度实测：低至7元/月的专线与BGP套餐盘点"
+        description="真正的高性价比是在保障晚高峰不卡顿、流媒体解锁正常的前提下，实现每GB单价或每月成本的最优化。"
+        href="/articles/cost-effective-airport-comparison/"
+        category="性价比机场"
+        cover="/images/covers/airport.svg"
+        pubDate="2026-10-19"
+        tags={['性价比机场', '便宜机场', '学生推荐']}
+      />
+    </div>
+  </section>
+
+  <!-- Full 31 Brands Verified Benchmark Matrix (Section 5) -->
+  <section id="benchmarks" class="bg-white py-16 border-y border-slate-100 scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-10">
+        <div>
+          <span class="text-xs font-bold text-brand-600 uppercase tracking-wider block mb-1">VERIFIED BENCHMARKS</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            高可用机场实测矩阵（31家全量品牌榜单）
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">按晚高峰延迟、带宽吞吐、丢包率与流媒体解锁综合核准 · 全量31家已核验品牌实测矩阵</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-xs font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            全量 31 家实测矩阵
+          </span>
+          <a href="/brands/" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-50 text-brand-700 text-xs font-bold hover:bg-brand-100 transition-colors">
+            <span>进入多维筛选中心</span>
+            <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {allBrands.map((b) => (
+          <BrandCard brand={b} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Client Software Directory (Section 12) -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-8">
+      <div>
+        <span class="text-xs font-bold text-brand-600 uppercase tracking-wider block mb-1">CLIENT ECOSYSTEM</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          全平台主流代理客户端知识库
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">覆盖 Windows、Android、iOS、macOS 及软路由开源/官方下载源</p>
+      </div>
+      <a href="/clash/recommend/" class="text-xs font-bold text-brand-600 hover:text-brand-700">
+        查看各平台详细横评 &rarr;
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {clientsData.slice(0, 4).map((c) => (
+        <div class="bg-white rounded-2xl border border-surface-border p-5 card-hover-effect flex flex-col justify-between h-full">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded">
+                {c.platforms.join(' / ')}
+              </span>
+              <span class="text-[11px] font-semibold text-emerald-600">
+                {c.isFree ? '开源免费' : '付费应用'}
+              </span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">{c.name}</h3>
+            <p class="text-xs text-slate-500 leading-relaxed line-clamp-3 mb-3">{c.summary}</p>
+          </div>
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-400">内核: {c.core.split(' ')[0]}</span>
+            <a
+              href={c.downloadUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-bold text-brand-600 hover:underline"
+            >
+              官方源 &rarr;
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Latest Articles Stream (Section 15) -->
+  <section class="bg-white py-16 border-t border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-xs font-bold text-brand-600 uppercase tracking-wider block mb-1">LATEST UPDATES</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            最新发布实测与技术知识
+          </h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        {latestPosts.slice(0, 6).map((post) => (
+          <ArticleCard
+            title={post.data.title}
+            description={post.data.description}
+            href={`/${post.collection}/${post.id}/`}
+            category={post.data.category}
+            pubDate={post.data.pubDate}
+            cover={post.data.cover}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Homepage FAQ (Section 16) -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <FAQSection
+      title="关于网络代理、机场与科学上网的高频问答"
+      items={[
+        {
+          question: "初次接触科学上网，应该先买机场还是先下客户端？",
+          answer: "建议先确定您使用的设备平台（如 Windows 电脑推荐下载 Clash Verge Rev，安卓推荐 v2rayNG，苹果手机需准备海外 Apple ID 下载小火箭 Shadowrocket）。客户端安装完毕后，再选择如光速云或飞猫云这样提供标准订阅链接的高性价比机场，复制订阅链接导入即可一键畅联。"
+        },
+        {
+          question: "为什么本站优先推荐 IEPL/IPLC 专线而不是公网直连？",
+          answer: "公网直连节点在敏感时期容易遭遇大面积阻断与高丢包，且晚高峰公网骨干网络拥堵严重。而 IEPL/IPLC 是通过跨境专用物理内网光纤直连海外机房，不经过公网网关，具备抗封锁、零丢包、低延迟的核心优势。"
+        },
+        {
+          question: "购买套餐后遇到节点无法连接，应该如何快速排查？",
+          answer: "请依次检查：1. 电脑或手机的系统时间是否准确（时间误差超过90秒会导致TLS握手失败）；2. 在客户端中右键点击订阅执行「更新订阅」以获取最新可用节点；3. 检查系统代理开关或TUN模式是否被杀毒软件误拦截。"
+        }
+      ]}
+    />
+  </section>
+</BaseLayout>

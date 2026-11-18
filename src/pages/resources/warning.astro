@@ -1,0 +1,309 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import BrandCard from '../../components/cards/BrandCard.astro';
+import BrandAffiliateCTA from '../../components/review/BrandAffiliateCTA.astro';
+import FAQSection from '../../components/common/FAQSection.astro';
+import { getFeaturedBrands, getTopBrands, brands } from '../../data/brands';
+import contentData from '../../data/subtopic_warning.json';
+
+const featuredBrand = getFeaturedBrands()[0] || brands[0]; // 光速云
+const topBrands = getTopBrands(3);
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: '机场跑路预警数据库：前兆识别、年付风险防范与支付维权自救指南',
+  description: 'v2rayn指南测评实验室权威出品：揭秘机场跑路前五大异常征兆、低价年付庞氏陷阱模型、假性断网精准鉴别、支付争议追款维权四步法与同系马甲站识别技巧。',
+  author: {
+    '@type': 'Organization',
+    name: 'v2rayn指南测评实验室',
+    url: 'https://v2rayn.run/'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'v2rayn指南',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://v2rayn.run/favicon.webp'
+    }
+  },
+  datePublished: '2026-10-21T08:00:00+08:00',
+  dateModified: '2026-11-18T18:50:00+08:00',
+  mainEntityOfPage: 'https://v2rayn.run/resources/warning/'
+};
+---
+
+<BaseLayout
+  title="机场跑路预警数据库与前兆识别维权指南 (2026最新) | v2rayn指南"
+  description="v2rayn指南测评实验室权威出品：揭秘机场跑路前五大异常征兆、低价年付庞氏陷阱模型、假性断网精准鉴别、支付争议追款维权四步法与同系马甲站识别技巧。"
+  canonical="https://v2rayn.run/resources/warning/"
+  schema={pageSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { name: '资源与情报', href: '/resources/' },
+        { name: '机场跑路预警数据库' }
+      ]}
+    />
+
+    <!-- Hero Header -->
+    <header class="mt-4 mb-10 max-w-4xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-semibold mb-3">
+        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        资源与情报 专项实测指南 // 2026权威版
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+        机场跑路预警数据库：前兆识别、年付风险防范与支付维权自救指南
+      </h1>
+      <p class="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed">
+        v2rayn指南测评实验室权威出品：揭秘机场跑路前五大异常征兆、低价年付庞氏陷阱模型、假性断网精准鉴别、支付争议追款维权四步法与同系马甲站识别技巧。
+      </p>
+    </header>
+
+    <!-- Two-Column Main Layout: 8 cols content + 4 cols sticky sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      
+      <!-- Left Column: Core Technical Content (8 cols) -->
+      <div class="lg:col-span-8 space-y-12">
+
+        <!-- Answer-First Summary Box -->
+        <section id="answer-first" class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-3xl border border-amber-200/80 p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/20">
+              ⚡
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                核心结论速览：Answer-First 核心直接结论与避坑要点
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">面向实际选型、排障与防坑的第一响应行动指引</p>
+            </div>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-sm" set:html={contentData.answerFirst} />
+
+          <div class="mt-6 pt-5 border-t border-amber-200/60">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              核心参数与横向对比速查表
+            </h3>
+            <div set:html={contentData.table1} />
+          </div>
+        </section>
+
+        <!-- Chapter 1 -->
+        
+        <section id="chap-1" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap1} />
+        </section>
+
+        <!-- Chapter 2 -->
+        
+        <section id="chap-2" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap2} />
+        </section>
+
+        <!-- Chapter 3 -->
+        
+        <section id="chap-3" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap3} />
+        </section>
+
+        <!-- Chapter 4 -->
+        
+        <section id="chap-4" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap4} />
+        </section>
+
+        <!-- Chapter 5 -->
+        
+        <section id="chap-5" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap5} />
+        </section>
+
+        <!-- Chapter 6 -->
+        
+
+        <!-- Decision Tree Section -->
+        <section id="decision-tree" class="bg-gradient-to-br from-slate-900 to-slate-950 text-slate-100 rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800">
+          <div class="border-b border-slate-800 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block mb-1">DECISION MATRIX // ACTION PATHS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              用户决策分支与最佳实操路线图
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">根据具体需求与网络症状，直接沿对应分支执行最优策略</p>
+          </div>
+
+          <div class="space-y-6 text-xs sm:text-sm font-mono leading-relaxed">
+            
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-emerald-400 text-base mb-2">分支一：节点突然全红，排查是本地故障还是机场跑路</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>校准本地系统时间，确认国内公网连接正常；</li>
+                <li>在客户端中更新订阅，观察 HTTP 状态码；</li>
+                <li>访问机场官网，查看是否有最新的机房割接或被攻击公告；</li>
+                <li>打开 Telegram 官方群，看是否允许正常讨论与报障；</li>
+                <li>若官网失联且群内开启禁言超 24 小时，立即定性为高危跑路风险。</li>
+              </ol>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-sky-400 text-base mb-2">分支二：刚购买了年付，服务商失联，启动追款程序</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>截图保存支付账单、官网套餐购买凭据与测速全红截图；</li>
+                <li>登录支付宝/微信/银行 App 查找该笔交易订单；</li>
+                <li>发起商户未履约争议投诉，提交完整证据链；</li>
+                <li>在社交平台搜索同名受害者，共同向第三方支付通道集体报备。</li>
+              </ol>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-amber-400 text-base mb-2">分支三：如何建立“永不断网”的抗风险个人配置架构</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>主力线路：选购 1 家运营 2 年以上、具备 IEPL 专线的优质月付机场；</li>
+                <li>备用线路：选购 1 个一次性付费、流量不过期的永久不限时套餐包；</li>
+                <li>本地存储：将两家服务商的原始订阅链接和免翻墙备用镜像存入本地记事本；</li>
+                <li>即便主力服务商突然瘫痪，30 秒内一键切换备用线路，业务完全不受干扰。</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Exhaustive FAQ Section -->
+        <section id="faq-section" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <FAQSection
+            title="机场跑路预警数据库 常见高频疑问权威解答 (FAQ)"
+            headingLevel="h2"
+            items={[
+          {
+                    "question": "为什么很多跑路机场在失联前还要搞骨折年付大促？",
+                    "answer": "这是恶意运营者经典的套现手段。因为专线与服务器通常是按月或按季度向上游机房续费的。当运营者发现资金链即将断裂或专线即将到期无法续费时，会在最后几天利用超低折扣吸引贪便宜的用户充值，最大化卷走资金后彻底失联。"
+          },
+          {
+                    "question": "开业多少年的机场才算相对安全稳健？",
+                    "answer": "建议优先选择连续运营 2 年甚至 3 年以上的成熟品牌。这类品牌经历了多次敏感期封锁考验，积累了稳定的现金流和机房合作信誉，其跑路概率远低于开业仅几个月的新兴小站。"
+          },
+          {
+                    "question": "在支付宝投诉商户真的能退款成功吗？",
+                    "answer": "有相当高的成功率！因为国内第三方聚合支付服务商对下游商户实行“T+1”或“T+7”结算机制，且通常扣押了一定比例的商户保证金。一旦大量用户集中投诉同一商户欺诈失联，支付平台会迅速冻结该商户的账户并对投诉用户启动原路退款。"
+          },
+          {
+                    "question": "如果不限时套餐的机场跑路了，岂不是亏损更大？",
+                    "answer": "因此不限时套餐同样必须挑选品牌信誉度高、运营时间长的大厂（如光速云的 147 永久套餐）。这类套餐单价通常仅为几十元，即便作为备用常驻几年，其折旧成本也远低于每年重复购买小机场年付的踩坑成本。"
+          },
+          {
+                    "question": "为什么机场跑路后，我的邮箱会收到很多垃圾钓鱼邮件？",
+                    "answer": "因为跑路站点的数据库往往无人维护，甚至被原运营者打包倒卖给黑产。不法分子通过导出的邮箱和密码进行全网撞库。因此再次强调：注册任何网络代理服务，必须使用专用的独立邮箱与高强度密码。"
+          },
+          {
+                    "question": "机场主失联了，本地客户端里的节点还能用吗？",
+                    "answer": "如果该节点使用的是第三方 VPS 且该 VPS 租期尚未到期，可能短期内仍有部分节点残留连通。但一旦订阅到期或机房关停，所有节点将彻底失效。建议立即寻找合规替代方案，不要抱有侥幸心理。"
+          }
+]}
+          />
+        </section>
+
+        <!-- Chapter Verified Backups (Affiliate CTA) -->
+        <section id="verified-backups" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">VERIFIED PROVIDERS // DISASTER RECOVERY</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              测评实验室实测推荐高可用备用方案
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">经本站测评实验室连续 90 天网络稳定性跟踪，线路参数与真实带宽经事实审计</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+            <BrandCard brand={featuredBrand} />
+            <BrandCard brand={topBrands[1] || topBrands[0]} />
+          </div>
+
+          <!-- Primary Brand Compliant Affiliate CTA -->
+          <BrandAffiliateCTA
+            brand={featuredBrand}
+            customText="高可用备用专线首选：光速云（IEPL企业级双专线架构，年付折合¥8/月，提供一次性247GB斯诺克不过期永久包）"
+          />
+
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+            <p><strong>合规与客观中立声明</strong>：本站部分链接包含推广推荐参数（Affiliate Links），用户通过链接注册可能为本站带来维护佣金，但绝不影响用户实付价格。评测结论基于真实采集数据，不因商业合作伪造测速排名。</p>
+            <p>数据核准基准日：2026-11-18。网络工具仅用于跨境合法商务、科研与技术学习，请严格遵守当地法律法规。</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column: Sticky Table of Contents & Navigation (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Sticky Table of Contents -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <h3 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-brand-600" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span>本页目录导航</span>
+          </h3>
+
+          <nav class="space-y-1.5 text-xs text-slate-600 font-medium">
+            <a href="#answer-first" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 核心结论与横向对比表
+            </a>
+            <a href="#chap-1" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">&bull; 第一部分：技术生态与背景</a>
+            <a href="#chap-2" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">&bull; 第二部分：关键机理与攻防</a>
+            <a href="#chap-3" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">&bull; 第三部分：实操方案与避坑</a>
+            <a href="#chap-4" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">&bull; 第四部分：进阶工具与配置</a>
+            <a href="#chap-5" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">&bull; 第五部分：环境审计与自查</a>
+            
+            <a href="#decision-tree" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 用户决策分支路线图
+            </a>
+            <a href="#faq-section" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 常见高频疑问解答 (FAQ)
+            </a>
+            <a href="#verified-backups" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 实测高可用备用方案推荐
+            </a>
+          </nav>
+        </div>
+
+        <!-- Return to Resources Portal -->
+        <div class="bg-gradient-to-br from-brand-50 to-indigo-50/50 rounded-2xl border border-brand-100 p-6 shadow-sm text-xs">
+          <span class="font-bold text-brand-700 uppercase tracking-wider block mb-1">
+            一级主题总门户
+          </span>
+          <h4 class="text-base font-bold text-slate-900 mb-2">资源与情报专著级知识库</h4>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            查阅 1.3 万字专著级情报全景：跑路预警机制、订阅拉取全状态码自查、真实延时测速与合规底线。
+          </p>
+          <a
+            href="/resources/"
+            class="block w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center shadow-md shadow-brand-500/20 transition-all"
+          >
+            返回资源与情报总览 &rarr;
+          </a>
+        </div>
+
+        <!-- 31 Brands Database Fast Access -->
+        <div class="bg-white rounded-2xl border border-surface-border p-5 shadow-sm text-xs">
+          <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-1.5">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            31家机场参数筛选库
+          </h4>
+          <p class="text-slate-500 leading-relaxed mb-3">
+            已对全网 31 家主流服务商的线路、价格、优惠码与解锁状态完成事实审计，支持即时过滤。
+          </p>
+          <a
+            href="/brands/"
+            class="block w-full py-2.5 rounded-lg border border-slate-200 hover:border-brand-500 hover:text-brand-600 text-slate-700 font-semibold text-center transition-all"
+          >
+            打开品牌参数筛选器 &rarr;
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>

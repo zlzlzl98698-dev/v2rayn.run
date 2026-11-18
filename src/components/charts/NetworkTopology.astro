@@ -1,0 +1,68 @@
+---
+interface Props {
+  brandName?: string;
+  lineType?: string;
+}
+
+const { brandName = '专线架构', lineType = 'IEPL 专线直连' } = Astro.props;
+---
+
+<div class="bg-slate-950 text-slate-100 rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl my-6 font-mono text-xs">
+  <!-- Header -->
+  <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+      <span class="font-bold text-slate-200 tracking-wide uppercase">
+        Network Path Observatory // {brandName}
+      </span>
+    </div>
+    <span class="text-slate-400 text-[11px]">{lineType}</span>
+  </div>
+
+  <!-- Topology Flow Visual -->
+  <div class="py-6 px-2 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+    
+    <!-- Step 1: User Client -->
+    <div class="w-full md:w-48 p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
+      <div class="text-brand-400 mb-1 text-sm font-bold">[用户终端]</div>
+      <div class="text-slate-400 text-[11px]">PC / 移动端 / 软路由</div>
+      <div class="text-[10px] text-slate-400 mt-1">Clash / v2rayN</div>
+    </div>
+
+    <!-- Arrow 1 -->
+    <div class="flex md:flex-col items-center justify-center text-slate-400 text-[11px]">
+      <span class="hidden md:block">&darr;</span>
+      <span class="md:hidden">&rarr;</span>
+      <span class="text-[10px] text-sky-400 px-1">加密传输 (VLESS)</span>
+    </div>
+
+    <!-- Step 2: BGP Entry -->
+    <div class="w-full md:w-52 p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
+      <div class="text-emerald-400 mb-1 text-sm font-bold">[国内前置入口]</div>
+      <div class="text-slate-400 text-[11px]">上海 / 广州 / 深圳 BGP</div>
+      <div class="text-[10px] text-emerald-400 mt-1">三网优化 · 隐藏真实IP</div>
+    </div>
+
+    <!-- Arrow 2 (Dedicated Line) -->
+    <div class="flex md:flex-col items-center justify-center text-slate-400 text-[11px]">
+      <span class="hidden md:block">&darr;</span>
+      <span class="md:hidden">&rarr;</span>
+      <span class="text-[10px] text-amber-400 font-bold px-1">══ IEPL/IPLC 专线 ══</span>
+      <span class="text-[9px] text-slate-400">不经公网骨干QoS</span>
+    </div>
+
+    <!-- Step 3: Overseas Egress -->
+    <div class="w-full md:w-52 p-3 rounded-xl bg-slate-900 border border-slate-800 text-center">
+      <div class="text-sky-400 mb-1 text-sm font-bold">[海外落地入口]</div>
+      <div class="text-slate-400 text-[11px]">香港 / 东京 / 新加坡 / 美西</div>
+      <div class="text-[10px] text-sky-400 mt-1">原生IP · 4K流媒体解锁</div>
+    </div>
+
+  </div>
+
+  <!-- Footer Info -->
+  <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex flex-wrap items-center justify-between">
+    <span>架构特性: 跨境段全程内网专线互联，避免晚高峰公网丢包与限速</span>
+    <span class="text-slate-400">示意结构图 (基于实测拓扑验证)</span>
+  </div>
+</div>

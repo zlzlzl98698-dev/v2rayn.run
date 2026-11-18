@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('guides');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<ArticleLayout
+  title={post.data.title}
+  description={post.data.description}
+  category="实战教程"
+  categoryHref="/clash/tutorial/"
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  author={post.data.author}
+  cover={post.data.cover}
+  excerpt={post.data.excerpt}
+  faq={post.data.faq}
+  brandRef={post.data.brandRef}
+  tags={post.data.tags}
+>
+  <Content />
+</ArticleLayout>

@@ -1,0 +1,274 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import BrandCard from '../../components/cards/BrandCard.astro';
+import BrandAffiliateCTA from '../../components/review/BrandAffiliateCTA.astro';
+import FAQSection from '../../components/common/FAQSection.astro';
+import { brands, getFeaturedBrands, getTopBrands } from '../../data/brands';
+import contentData from '../../data/clash_subtopics/meta.json';
+
+const featuredBrand = getFeaturedBrands()[0] || brands[0]; // 光速云
+const topBrands = getTopBrands(3);
+
+const topicSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'Mihomo (Clash.Meta) 内核技术专著：架构革命、抗封锁协议与高阶特性深度指南',
+  description: 'v2rayn指南测评实验室权威出品：Mihomo(Clash.Meta)开源演进史、VLESS Reality与Hysteria 2底层机理、Sniffer域名嗅探引擎、FullCone NAT游戏穿透与内核升级实操。',
+  author: {
+    '@type': 'Organization',
+    name: 'v2rayn指南测评实验室',
+    url: 'https://v2rayn.run/'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'v2rayn指南',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://v2rayn.run/favicon.webp'
+    }
+  },
+  datePublished: '2026-10-26T08:00:00+08:00',
+  dateModified: '2026-11-18T19:50:00+08:00',
+  mainEntityOfPage: 'https://v2rayn.run/clash/meta/'
+};
+---
+
+<BaseLayout
+  title="Mihomo (Clash.Meta) 内核深度解析：新一代协议支持与高级特性专著 | v2rayn指南"
+  description="v2rayn指南测评实验室权威出品：Mihomo(Clash.Meta)开源演进史、VLESS Reality与Hysteria 2底层机理、Sniffer域名嗅探引擎、FullCone NAT游戏穿透与内核升级实操。"
+  canonical="https://v2rayn.run/clash/meta/"
+  schema={topicSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { name: 'Clash 客户端', href: '/clash/' },
+        { name: 'Mihomo (Clash.Meta) 内核技术专著' }
+      ]}
+    />
+
+    <!-- Header Section -->
+    <header class="my-6 max-w-4xl">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">
+          Clash 客户端 // 深度专题
+        </span>
+        <span class="text-xs text-slate-400">&bull;</span>
+        <span class="text-xs text-emerald-600 font-semibold">2026 深度实测</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+        Mihomo (Clash.Meta) 内核技术专著：架构革命、抗封锁协议与高阶特性深度指南
+      </h1>
+      <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+        v2rayn指南测评实验室权威出品：Mihomo(Clash.Meta)开源演进史、VLESS Reality与Hysteria 2底层机理、Sniffer域名嗅探引擎、FullCone NAT游戏穿透与内核升级实操。
+      </p>
+    </header>
+
+    <!-- Main Content & Layout (8 cols + 4 cols sidebar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      
+      <!-- Left Content (8 cols) -->
+      <div class="lg:col-span-8 space-y-10">
+        
+        <!-- Answer-First Box -->
+        <section id="answer-first" class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-3xl border border-amber-200/80 p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/20">
+              ⚡
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                核心结论速览：Answer-First 核心直接结论与实战避坑
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">面向实际选型、深度配置与排障的第一响应行动指引</p>
+            </div>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-sm" set:html={contentData.answerFirst} />
+
+          <div class="mt-6 pt-5 border-t border-amber-200/60">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              核心参数与横向对比速查表
+            </h3>
+            <div set:html={contentData.table1} />
+          </div>
+        </section>
+
+        <!-- Chapter 1 -->
+        
+        <section id="chap-1" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap1} />
+        </section>
+
+        <!-- Chapter 2 -->
+        
+        <section id="chap-2" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap2} />
+        </section>
+
+        <!-- Chapter 3 -->
+        
+        <section id="chap-3" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap3} />
+        </section>
+
+        <!-- Chapter 4 -->
+        
+        <section id="chap-4" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap4} />
+        </section>
+
+        <!-- Decision Tree Section -->
+        <section id="decision-tree" class="bg-gradient-to-br from-slate-900 to-slate-950 text-slate-100 rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800">
+          <div class="border-b border-slate-800 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block mb-1">DECISION MATRIX // ACTION PATHS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              用户决策分支与最佳实操路线图
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">根据具体需求与网络环境，直接沿对应分支执行最优策略</p>
+          </div>
+
+          <div class="space-y-6 text-xs sm:text-sm font-mono leading-relaxed">
+            
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-emerald-400 text-base mb-2">分支一：日常极速观影与全网漫游用户</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>第一步：在客户端中确认内核类型切换为 Mihomo；</li>
+                <li>第二步：选用支持 Hysteria 2 协议的专线节点（如光速云）；</li>
+                <li>第三步：开启 Rule 规则分流，体验 4K@60fps 极速无缓冲秒开。</li>
+              </ol>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-sky-400 text-base mb-2">分支二：主机游戏玩家与联机对战极客</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>第一步：在 Mihomo 配置中确认开启 UDP 与 FullCone NAT 特性；</li>
+                <li>第二步：开启客户端 TUN 模式，并将游戏主机网关指向该电脑；</li>
+                <li>第三步：进入主机网络测试，NAT 类型跃升为 NAT Type A，语音联机秒匹配。</li>
+              </ol>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-amber-400 text-base mb-2">分支三：跨境金融与外贸防风控用户</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>第一步：选用搭载 VLESS Reality 协议并绑定原生纯净 IP 的专线出口；</li>
+                <li>第二步：利用 Sniffer 嗅探引擎确保所有 API 均经过特定分流规则；</li>
+                <li>第三步：固定策略组节点，彻底阻断多 IP 漂移导致的风控封号。</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Exhaustive FAQ Section -->
+        <section id="faq-section" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <FAQSection
+            title="Mihomo (Clash.Meta) 内核技术专著 常见高频疑问权威解答 (FAQ)"
+            headingLevel="h2"
+            items={contentData.faqs}
+          />
+        </section>
+
+        <!-- Chapter Verified Backups (Affiliate CTA) -->
+        <section id="verified-backups" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">VERIFIED PROVIDERS // DISASTER RECOVERY</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              测评实验室实测推荐高可用配置方案
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">经本站测评实验室连续 90 天网络稳定性跟踪，线路参数与真实带宽经事实审计</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+            <BrandCard brand={featuredBrand} />
+            <BrandCard brand={topBrands[1] || topBrands[0]} />
+          </div>
+
+          <!-- Primary Brand Compliant Affiliate CTA -->
+          <BrandAffiliateCTA
+            brand={featuredBrand}
+            customText="Mihomo 内核全协议深度适配标杆方案：光速云（IEPL企业级双专线架构，年付折合¥8/月，支持一键导入Clash Verge与致敬斯诺克147永久不过期包）"
+          />
+
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+            <p><strong>合规与客观中立声明</strong>：本站部分链接包含推广推荐参数（Affiliate Links），用户通过链接注册可能为本站带来维护佣金，但绝不影响用户实付价格。评测结论基于真实采集数据，不因商业合作伪造测速排名。</p>
+            <p>数据核准基准日：2026-11-18。网络工具仅用于跨境合法商务、科研与技术学习，请严格遵守当地法律法规。</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Sidebar (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Parent Topic Portal Direct Link -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <span class="text-xs font-bold text-brand-600 uppercase tracking-wider block mb-1">
+            一级主题门户
+          </span>
+          <h4 class="text-base font-bold text-slate-900 mb-2">
+            Clash 客户端 综合知识库
+          </h4>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">
+            返回 Clash 客户端一级门户，查看全平台选型表、Mihomo 内核演进与 10 大系统化专著章节。
+          </p>
+          <a
+            href="/clash/"
+            class="block w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-center text-xs shadow-sm transition-colors"
+          >
+            &larr; 返回 Clash 客户端门户
+          </a>
+        </div>
+
+        <!-- Sibling Subtopics Navigation -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <h4 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            Clash 客户端 关联精选专题
+          </h4>
+          <div class="space-y-1.5 text-xs">
+            
+            <a href="/clash/recommend/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 全平台 Clash 客户端推荐榜
+            </a>
+            <a href="/clash/verge/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; Clash Verge Rev 功能全解析
+            </a>
+            <a href="/clash/verge-download/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 官方安全下载源与安装避坑
+            </a>
+            <a href="/clash/verge-subscription/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 订阅导入与自动更新设置
+            </a>
+            <a href="/clash/tutorial/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 全平台图文新手配置教程
+            </a>
+            <a href="/clash/troubleshooting/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 节点超时与TUN报错彻底排查
+            </a>
+          </div>
+        </div>
+
+        <!-- 31 Brands Database Fast Access -->
+        <div class="bg-gradient-to-br from-brand-50 to-blue-50/50 rounded-2xl border border-brand-100 p-5 shadow-sm text-xs">
+          <span class="font-bold text-brand-700 uppercase tracking-wider block mb-1">
+            客观数据库索引中心
+          </span>
+          <p class="text-slate-600 leading-relaxed mb-3">
+            想按协议、客户端或特定价格自由组合筛选？访问本站 31 家机场品牌实时数据库。
+          </p>
+          <a
+            href="/brands/"
+            class="block w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center shadow-sm transition-colors"
+          >
+            打开品牌参数筛选器 &rarr;
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>

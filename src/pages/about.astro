@@ -1,0 +1,235 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/common/Breadcrumb.astro';
+
+const breadcrumbItems = [
+  { label: '关于实验室与评测方针', href: '/about/' },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "关于v2rayn指南测评实验室与客观评测方针",
+  "description": "v2rayn指南测评实验室机构使命、网络测试硬件环境、晚高峰测速方法论、商业独立性与读者合规承诺。",
+  "url": "https://v2rayn.run/about/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "v2rayn指南测评实验室",
+    "url": "https://v2rayn.run",
+    "logo": "https://v2rayn.run/favicon.webp"
+  }
+};
+---
+
+<BaseLayout
+  title="关于v2rayn指南测评实验室：评测准则、测试环境与E-E-A-T透明度声明"
+  description="了解v2rayn指南测评实验室：深入拆解我们的测试机房硬件配置、三网宽带实测环境、晚高峰千轮发包方法论、商业推广合规声明与编辑独立性原则。"
+  schema={schema}
+>
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-b from-brand-50/60 to-white py-12 sm:py-16 border-b border-surface-border">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumb items={breadcrumbItems} />
+      <div class="mt-4">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-700 tracking-wider uppercase mb-3">
+          E-E-A-T TRANSPARENCY // 实验室透明度披露
+        </span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+          关于 v2rayn指南测评实验室
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl">
+          坚持「Answer-First」客观实测原则，拒绝无依据造神与商业黑幕。我们以电信级网络工程标准，为中文用户呈现真实、可复现、严谨的跨国网络加速与客户端实战数据。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
+
+    <!-- Mission Card -->
+    <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+          <span class="w-2.5 h-6 bg-brand-600 rounded-full inline-block"></span>
+          一、我们的使命与核心价值观
+        </h2>
+      </div>
+      <p class="text-slate-600 leading-relaxed text-base">
+        进入 2026 年，中文网络工具评测生态泥沙俱下。大量所谓的“评测网站”实际上是黑产资金盘自导自演的引流假网，充斥着毫无测试依据的“虚假 5 星好评”、伪造测速截图以及圈钱年付跑路盘。
+      </p>
+      <p class="text-slate-600 leading-relaxed text-base">
+        <strong>v2rayn指南测评实验室</strong> 创立的唯一初衷，就是打破这种信息不对称。我们由资深网络工程师、Linux 系统管理员与海外开源网络爱好者共同维护，始终坚持三大核心铁律：
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+          <div class="text-brand-600 font-bold text-lg">01. 真实发包拒绝脑补</div>
+          <p class="text-xs text-slate-500 leading-relaxed">所有节点数据均经过 1000 轮单线程真实发包与晚高峰 20:30 - 21:30 现场采样，绝不凭空捏造延迟与吞吐。</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+          <div class="text-brand-600 font-bold text-lg">02. 穿透伪装直击底层</div>
+          <p class="text-xs text-slate-500 leading-relaxed">利用 MTR 路由追踪与 ASN 自治系统分析，彻底剥离伪装成“IEPL 纯专线”的劣质公网中转，还原物理本质。</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+          <div class="text-brand-600 font-bold text-lg">03. 商业合规零私货</div>
+          <p class="text-xs text-slate-500 leading-relaxed">全站推广链接 100% 遵守搜索引擎 nofollow 规范，商业合作绝不能改变客观测试数据与负面缺陷的公开发布。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Test Environment -->
+    <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+          <span class="w-2.5 h-6 bg-brand-600 rounded-full inline-block"></span>
+          二、测评实验室真实硬件与网络环境披露
+        </h2>
+      </div>
+      <p class="text-slate-600 leading-relaxed text-base">
+        为了确保测试数据具有普适的行业参考价值，实验室在华南、华东与华北常年部署了独立的实体探针与监控节点：
+      </p>
+
+      <div class="overflow-x-auto my-6 border border-slate-200 rounded-2xl">
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="bg-slate-50 text-slate-900 font-bold border-b border-slate-200">
+            <tr>
+              <th class="py-3 px-4">物理位置</th>
+              <th class="py-3 px-4">运营商接入带宽</th>
+              <th class="py-3 px-4">骨干网属性</th>
+              <th class="py-3 px-4">主要负责测试维度</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-slate-900">广东 深圳</td>
+              <td class="py-3 px-4">中国电信 1000M FTTH 光纤</td>
+              <td class="py-3 px-4">163骨干网 (AS4134) + CN2双栈</td>
+              <td class="py-3 px-4">深港 IEPL 专线、亚太海缆低延迟与 4K 流媒体压测</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-slate-900">上海 浦东</td>
+              <td class="py-3 px-4">中国联通 500M FTTO 双线</td>
+              <td class="py-3 px-4">169骨干网 (AS4837) + AS9929</td>
+              <td class="py-3 px-4">沪日专线直通、中美跨洋 NCP 海缆延迟与抖动标准差</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-slate-900">山东 青岛</td>
+              <td class="py-3 px-4">中国移动 1000M 商业宽带</td>
+              <td class="py-3 px-4">CMNET (AS9808)</td>
+              <td class="py-3 px-4">移动三网 BGP 穿透率、弱网抗丢包与外网 QoS 压制实测</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="space-y-3 pt-2">
+        <h3 class="text-lg font-bold text-slate-900">测试终端与操作系统矩阵：</h3>
+        <ul class="list-disc list-inside text-sm text-slate-600 space-y-1">
+          <li><strong>桌面端测试基准</strong>：Windows 11 Pro 64-bit（运行 Clash Verge Rev 最新发行版，启用 Wintun 驱动与 TUN 模式）与 macOS Sonoma 14.x（Apple Silicon M-series）；</li>
+          <li><strong>移动端测试基准</strong>：iPhone 15 Pro / iOS 18（运行正版 Shadowrocket，启用 Config 模式与 Full-Cone NAT）与 Google Pixel 8 / Android 14（运行 Clash Meta for Android）；</li>
+          <li><strong>路由器与硬件网关</strong>：搭载 iStoreOS / OpenWrt 的 X86 软路由，用于局域网多设备并发吞吐压力测试。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Methodology -->
+    <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+          <span class="w-2.5 h-6 bg-brand-600 rounded-full inline-block"></span>
+          三、客观网络评测方法论与指标标准
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+          <h3 class="text-base font-bold text-slate-900">1. 晚高峰千轮发包与抖动标准差 (&sigma;)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            任何在清晨测试的平稳表现均不能代表晚高峰的真实抗压能力。我们统一定点在 <strong>每晚 20:30 - 21:30 全国公网最拥堵窗口</strong>，以 50ms 为间隔向节点发出 1000 个探测包，统计丢包率（Packet Loss）与延迟标准差（Jitter）。只有丢包率小于 0.2% 且抖动标准差 &sigma; &lt; 1.0ms 的节点，才被评为企业级高可用专线。
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+          <h3 class="text-base font-bold text-slate-900">2. 单线程 UDP 穿透与游戏抗阻断</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Speedtest 多线程并发测速容易被多连接掩盖短板。我们重点测试单线程 UDP 在外服竞技游戏（Apex、Valorant、CS2）以及 Discord 语音中的 NAT 穿透类型（Full-Cone NAT），以此作为检验底层网络有无严重超售与丢包的关键试金石。
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+          <h3 class="text-base font-bold text-slate-900">3. 流媒体 4K 缓冲健康度 (Buffer Health)</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            在 YouTube 上连续播放 4K 60fps / 8K 极限片源，实时读取专业统计信息（Stats for nerds）。合格节点的视频缓冲健康度必须稳定在 45 秒以上，任意拖拽进度条的重载时延必须小于 800 毫秒。
+          </p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+          <h3 class="text-base font-bold text-slate-900">4. AI 工具出口 IP 纯净度检测</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            针对 OpenAI ChatGPT 与 Anthropic Claude 的高强度反欺诈风控，检验出口 IP 是否属于恶名昭彰的广播机房段。合格的原生节点必须能够无感通过 Cloudflare Turnstile 人机安全校验，杜绝频繁封号与降级。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Disclosure & Editorial Independence -->
+    <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+          <span class="w-2.5 h-6 bg-brand-600 rounded-full inline-block"></span>
+          四、商业推广透明度与编辑独立性保证
+        </h2>
+      </div>
+
+      <div class="bg-amber-50/60 border border-amber-200/80 rounded-2xl p-6 text-sm text-slate-700 space-y-3">
+        <h3 class="font-bold text-amber-900 text-base flex items-center gap-2">
+          <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          商业推广披露声明 (Affiliate Disclosure)
+        </h3>
+        <p class="leading-relaxed">
+          为了维持实验室的常态化运转，支撑每月高昂的多线宽带费用、服务器带宽开销以及多品牌套餐采购成本，本站部分外部跳转链接包含合规的商业推广推荐参数（Affiliate Links）。
+        </p>
+        <p class="leading-relaxed">
+          当您通过本站链接注册或选购服务时，我们可能会从服务商处获得微薄的佣金。<strong>但这绝不会额外增加您的一分钱支付成本</strong>。
+        </p>
+        <p class="leading-relaxed font-semibold text-slate-900">
+          编辑独立性承诺：我们坚决拒绝任何付费要求修改测速数据、掩盖晚高峰断流缺陷或强行伪装成第一名的商业行径。如果某家服务商发生跑路、严重超售或合规故障，我们将第一时间在评测报告与预警中心予以如实曝光！
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact & Feedback -->
+    <section class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+          <span class="w-2.5 h-6 bg-brand-600 rounded-full inline-block"></span>
+          五、勘误反馈与技术联络机制
+        </h2>
+      </div>
+      <p class="text-slate-600 leading-relaxed text-base">
+        网络环境与服务商线路具有高度的时效动态性。如果您在阅读过程中发现某项测速参数已经发生变动、某条内链失效或某个客户端功能在新版本中升级，欢迎随时向测评实验室反馈。我们承诺在 <strong>48 小时内</strong> 完成真实网络环境核验并发布勘误日志。
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-brand-100 flex items-center justify-center text-brand-600 font-bold">
+            @
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">官方技术支持与勘误邮箱</div>
+            <div class="text-sm font-bold text-slate-900">contact@v2rayn.run</div>
+          </div>
+        </div>
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-brand-100 flex items-center justify-center text-brand-600 font-bold">
+            #
+          </div>
+          <div>
+            <div class="text-xs text-slate-400">技术交流与知识检索</div>
+            <a href="/resources/faq/" class="text-sm font-bold text-brand-600 hover:underline">
+              查阅全网常见技术疑难 FAQ &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>

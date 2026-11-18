@@ -1,0 +1,73 @@
+---
+import type { SpeedTestRecord } from '../../types/brand';
+
+interface Props {
+  brandName: string;
+  records: SpeedTestRecord[];
+  testDate?: string;
+  source?: string;
+}
+
+const {
+  brandName,
+  records = [],
+  testDate = '2026-10-19 晚高峰',
+  source = '客观基准测速实验室',
+} = Astro.props;
+---
+
+<div class="bg-slate-950 text-slate-100 rounded-2xl p-5 sm:p-6 border border-slate-800 shadow-xl my-6">
+  <!-- Console Header -->
+  <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800 text-xs">
+    <div class="flex items-center gap-2">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-bold text-slate-200 tracking-wide font-mono uppercase">
+        Network Performance Observatory // {brandName}
+      </span>
+    </div>
+    <div class="flex items-center gap-3 text-slate-400 font-mono">
+      <span>测试环境: Clash Verge Rev</span>
+      <span>·</span>
+      <span>{testDate}</span>
+    </div>
+  </div>
+
+  <!-- Records List -->
+  <div class="divide-y divide-slate-800/80 my-4 space-y-3 pt-2">
+    {records.map((rec) => {
+      // Calculate progress percentage based on download speed number
+      const numMatch = rec.download.match(/\d+(\.\d+)?/);
+      const val = numMatch ? parseFloat(numMatch[0]) : 100;
+      const pct = Math.min(Math.round((val / 600) * 100), 100);
+
+      return (
+        <div class="pt-3 first:pt-0">
+          <div class="flex items-center justify-between text-xs sm:text-sm font-mono mb-1.5">
+            <span class="font-semibold text-slate-200 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-400"></span>
+              {rec.region}
+            </span>
+            <div class="flex items-center gap-4 text-xs font-mono">
+              <span class="text-slate-400">延迟: <strong class="text-emerald-400">{rec.latency}</strong></span>
+              <span class="text-slate-400">下行: <strong class="text-sky-400">{rec.download}</strong></span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+            <div
+              class="h-full bg-gradient-to-r from-brand-600 via-sky-400 to-emerald-400 rounded-full"
+              style={`width: ${pct}%`}
+            ></div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Console Footer -->
+  <div class="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] text-slate-400 font-mono">
+    <span>观测来源: {source}</span>
+    <span class="text-slate-400">测试指标基于独立节点吞吐量，非单一时刻绝对值</span>
+  </div>
+</div>

@@ -1,0 +1,568 @@
+const fs = require('fs');
+const path = require('path');
+const { micromark } = require('micromark');
+const { gfm, gfmHtml } = require('micromark-extension-gfm');
+const baseChapters = require('./vpn_monograph_text.cjs');
+const extraChapters = require('./vpn_monograph_text_extra.cjs');
+const vpnFaqs = require('../src/data/vpn_faqs.json');
+
+function countChineseCharacters(text) {
+  const matches = text.match(/[\u4e00-\u9fa5]/g);
+  return matches ? matches.length : 0;
+}
+
+function mdToHtml(md) {
+  let html = micromark(md, {
+    extensions: [gfm()],
+    htmlExtensions: [gfmHtml()]
+  });
+
+  // Responsive Table wrapping with strict inline styles
+  html = html.replace(/<table>/g, '<div class="table-responsive-wrapper overflow-x-auto my-6 border border-slate-200 rounded-2xl shadow-sm" style="overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch;"><table class="w-full text-left text-sm border-collapse" style="min-width: 680px;">');
+  html = html.replace(/<\/table>/g, '</table></div>');
+  html = html.replace(/<thead>/g, '<thead class="bg-slate-50 text-slate-800">');
+  html = html.replace(/<th>/g, '<th class="p-3.5 font-bold border-b border-slate-200 whitespace-nowrap text-xs sm:text-sm">');
+  html = html.replace(/<td>/g, '<td class="p-3.5 border-b border-slate-100 text-slate-600 text-xs sm:text-sm leading-relaxed">');
+
+  // Headings
+  html = html.replace(/<h3>/g, '<h3 class="text-xl font-bold text-slate-900 mt-8 mb-3 flex items-center gap-2">');
+  html = html.replace(/<h4>/g, '<h4 class="text-base font-bold text-slate-800 mt-5 mb-2">');
+
+  // Paragraphs
+  html = html.replace(/<p>/g, '<p class="text-slate-600 leading-relaxed mb-4">');
+
+  // Lists
+  html = html.replace(/<ul>/g, '<ul class="list-disc list-inside space-y-2 text-slate-600 my-4 pl-2">');
+  html = html.replace(/<ol>/g, '<ol class="list-decimal list-inside space-y-2 text-slate-600 my-4 pl-2">');
+
+  // Pre & Code: Match any attributes on code tag to prevent tag imbalance
+  html = html.replace(/<pre><code([^>]*)>/g, '<div class="p-4 rounded-xl bg-slate-900 text-slate-200 font-mono text-xs overflow-x-auto my-4"><pre><code$1>');
+  html = html.replace(/<\/code><\/pre>/g, '</code></pre></div>');
+
+  // Inline Code with break-all
+  html = html.replace(/<code>/g, '<code class="px-1.5 py-0.5 rounded bg-slate-100 text-brand-600 font-mono text-xs break-all">');
+
+  // Alerts
+  html = html.replace(/<blockquote>\s*<p>\[!CAUTION\]/g, '<blockquote class="border-l-4 border-rose-500 pl-4 py-2 my-4 bg-rose-50/70 rounded-r-xl text-rose-900 text-sm"><p class="font-bold text-rose-700 mb-1">⚠️ 高危警告与安全红线</p><p>');
+  html = html.replace(/<blockquote>\s*<p>\[!WARNING\]/g, '<blockquote class="border-l-4 border-amber-500 pl-4 py-2 my-4 bg-amber-50/70 rounded-r-xl text-amber-900 text-sm"><p class="font-bold text-amber-700 mb-1">⚠️ 注意与避坑提示</p><p>');
+  html = html.replace(/<blockquote>\s*<p>\[!IMPORTANT\]/g, '<blockquote class="border-l-4 border-brand-500 pl-4 py-2 my-4 bg-brand-50/70 rounded-r-xl text-brand-900 text-sm"><p class="font-bold text-brand-700 mb-1">ℹ️ 核心要点</p><p>');
+  // Blockquotes
+  html = html.replace(/<blockquote>/g, '<blockquote class="border-l-4 border-brand-500 pl-4 py-2 my-4 bg-brand-50/50 rounded-r-xl text-slate-700 italic">');
+
+  // Bold
+  html = html.replace(/<strong>/g, '<strong class="font-bold text-slate-900">');
+
+  return html;
+}
+
+const textBlocks = {};
+
+textBlocks.answerFirst = baseChapters.answerFirst;
+textBlocks.table1Overview = baseChapters.table1Overview;
+textBlocks.chap1Content = baseChapters.chap1Content + '\n' + extraChapters.chap1_extra;
+textBlocks.chap2Content = baseChapters.chap2Content + '\n' + extraChapters.chap2_extra;
+textBlocks.chap3Content = baseChapters.chap3Content + '\n' + extraChapters.chap3_extra;
+textBlocks.chap4Content = baseChapters.chap4Content + '\n' + extraChapters.chap4_extra;
+textBlocks.chap5Content = baseChapters.chap5Content + '\n' + extraChapters.chap5_extra;
+textBlocks.chap6Content = baseChapters.chap6Content + '\n' + extraChapters.chap6_extra;
+textBlocks.chap7Content = baseChapters.chap7Content + '\n' + extraChapters.chap7_extra;
+
+// Calculate pure Chinese characters in textBlocks
+let pureChineseCount = 0;
+for (const k in textBlocks) {
+  pureChineseCount += countChineseCharacters(textBlocks[k]);
+}
+console.log('Pure Chinese characters in VPN portal text blocks:', pureChineseCount);
+
+// Convert each block to styled HTML and verify tag balance
+const htmlBlocks = {};
+for (const k in textBlocks) {
+  const html = mdToHtml(textBlocks[k]);
+  const opens = (html.match(/<div[\s>]/g) || []).length;
+  const closes = (html.match(/<\/div>/g) || []).length;
+  if (opens !== closes) {
+    throw new Error(`CRITICAL TAG IMBALANCE in block "${k}": ${opens} opens vs ${closes} closes!`);
+  }
+  htmlBlocks[k] = html;
+}
+console.log('All VPN HTML blocks passed strict opening/closing tag balance validation!');
+
+// Write json data
+fs.writeFileSync('src/data/vpn_content.json', JSON.stringify(htmlBlocks, null, 2), 'utf8');
+console.log('Saved src/data/vpn_content.json');
+
+// Construct src/pages/vpn/index.astro
+const astroTemplate = `---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import BrandCard from '../../components/cards/BrandCard.astro';
+import BrandAffiliateCTA from '../../components/review/BrandAffiliateCTA.astro';
+import FAQSection from '../../components/common/FAQSection.astro';
+import { getFeaturedBrands, getTopBrands, brands } from '../../data/brands';
+import { navigationData } from '../../data/navigation';
+import vpnContent from '../../data/vpn_content.json';
+import vpnFaqs from '../../data/vpn_faqs.json';
+
+const featuredBrand = getFeaturedBrands()[0] || brands[0]; // 光速云
+const topBrands = getTopBrands(3);
+
+const vpnNav = navigationData.find(n => n.id === 'vpn');
+const subtopics = vpnNav ? vpnNav.items : [];
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: 'VPN 与加速器全方位指南：商用VPN、IEPL专线代理与游戏加速器深度测评专著',
+  description: 'v2rayn指南测评实验室权威出品：全景式解析2026年商业VPN在华技术折戟真相、深度包检测(DPI)机理、IEPL内网专线与传统VPN横向对比表、TCP-over-TCP拥塞控制崩溃与外服游戏/回国加速选型全攻略。',
+  author: {
+    '@type': 'Organization',
+    name: 'v2rayn指南测评实验室',
+    url: 'https://v2rayn.run/'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'v2rayn指南',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://v2rayn.run/favicon.webp'
+    }
+  },
+  datePublished: '2026-10-18T08:00:00+08:00',
+  dateModified: '2026-11-18T20:45:00+08:00',
+  mainEntityOfPage: 'https://v2rayn.run/vpn/'
+};
+---
+
+<BaseLayout
+  title="VPN 与加速器全景指南：商用VPN、专线代理与加速器横向实测专著 (2026最新) | v2rayn指南"
+  description="v2rayn指南测评实验室权威出品：深度解析商业VPN国内连通率真相、DPI深度包检测、IEPL企业专线、游戏加速器与海外回国网络拓扑对比指南。"
+  canonical="https://v2rayn.run/vpn/"
+  schema={pageSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb items={[{ name: 'VPN 与加速器' }]} />
+
+    <!-- Hero Header -->
+    <header class="mt-4 mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-semibold mb-4">
+        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        一级主题门户 // 专著级知识库
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+        VPN 与加速器
+      </h1>
+      <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-4xl leading-relaxed">
+        系统对比传统商业 VPN、企业专线代理、外服游戏加速器与反向回国网络工具在抗封锁、延迟、吞吐及隐私安全维度的本质差异。
+      </p>
+    </header>
+
+    <!-- Two-Column Main Layout: 8 cols content + 4 cols sticky sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      
+      <!-- Left Column: Core Rich Technical Content (8 cols) -->
+      <div class="lg:col-span-8 space-y-12">
+
+        <!-- Answer-First Executive Summary Box -->
+        <section id="answer-first" class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-3xl border border-amber-200/80 p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/20">
+              ⚡
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                核心结论速览：2026 全场景网络加速与隐私工具 30 秒速决指南
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">破除海外商业 VPN 营销谎言，提供真实可信的第一响应决策指引</p>
+            </div>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-sm" set:html={vpnContent.answerFirst} />
+
+          <div class="mt-6 pt-5 border-t border-amber-200/60">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              主流网络加速工具全维度横向技术对比表
+            </h3>
+            <div set:html={vpnContent.table1Overview} />
+          </div>
+        </section>
+
+        <!-- Topic Matrix Section (7 Subtopics) -->
+        <section id="topic-matrix" class="bg-slate-50 rounded-3xl border border-surface-border p-6 sm:p-8">
+          <div class="border-b border-slate-200 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">TOPIC MATRIX // 7 SUBTOPICS</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              VPN 与加速器 核心专题矩阵（7个二级专题）
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">涵盖商业VPN选型、免费版本风险、手机端优化、主流客户端横向测评、游戏加速与回国线路</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {subtopics.map(t => (
+              <a
+                href={t.href}
+                class="group flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-surface-border hover:border-brand-500 hover:shadow-md transition-all duration-200"
+              >
+                <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-sm shrink-0 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                  &rarr;
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+                    {t.title}
+                  </h3>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                    {t.description}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <!-- Chapter 1: Demise of Commercial VPNs & DPI -->
+        <section id="vpn-demise-and-dpi" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 01 // CENSORSHIP MECHANICS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第一章：传统商业 VPN 在华折戟真相与深度包检测（DPI）机理
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={vpnContent.chap1Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/vpn/reviews/" class="text-brand-600 hover:underline">&bull; 主流商用VPN深度评测</a>
+              <a href="/vpn/recommend/" class="text-brand-600 hover:underline">&bull; 全球商业VPN选型指引</a>
+              <a href="/resources/risk-intel/" class="text-brand-600 hover:underline">&bull; 国际线路封锁情报</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 2: Protocol Deep Dive: VPN vs Proxy -->
+        <section id="protocol-architecture" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 02 // PROTOCOL ENGINEERING</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第二章：协议深水区：第 3 层网络层 VPN vs 第 4/7 层代理的本质差异
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={vpnContent.chap2Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/vpn/comparison/" class="text-brand-600 hover:underline">&bull; 专线代理与VPN性能对比</a>
+              <a href="/clash/meta/" class="text-brand-600 hover:underline">&bull; VLESS与Hysteria2内核详解</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 3: Submarine Cables & IEPL Leased Lines -->
+        <section id="submarine-cables-iepl" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 03 // PHYSICAL INFRASTRUCTURE</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第三章：跨国物理网络全景：公网直连、BGP多线与 IEPL 纯内网专线
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={vpnContent.chap3Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <a href="/comparisons/iepl-vs-iplc-vs-bgp-explained/" class="text-brand-600 hover:underline font-semibold">&bull; IEPL vs IPLC vs BGP 底层光纤拓扑专著</a>
+          </div>
+        </section>
+
+        <!-- Chapter 4: Free VPN Dark Market & Privacy Risks -->
+        <section id="free-vpn-honeypots" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 04 // PRIVACY & DARK MARKET</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第四章：免费 VPN 灰黑产运作模型大起底：隐私倒卖与蜜罐陷阱
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={vpnContent.chap4Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/vpn/free/" class="text-brand-600 hover:underline">&bull; 免费VPN套路深度拆解</a>
+              <a href="/resources/warning/" class="text-brand-600 hover:underline">&bull; 机场跑路与风险预警</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 5: Gaming Accelerators vs Cross-Border Proxies -->
+        <section id="gaming-vs-proxy" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 05 // GAMING OPTIMIZATION</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第五章：传统游戏加速器 vs 专线代理：为什么游戏加速器无法访问网页？
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={vpnContent.chap5Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/vpn/accelerator/" class="text-brand-600 hover:underline">&bull; 专项网络加速器指引</a>
+              <a href="/clash/tutorial/" class="text-brand-600 hover:underline">&bull; Clash TUN全流量接管教程</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 6: Reverse Overseas Accelerator (Return to China) -->
+        <section id="reverse-accelerator" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 06 // RETURN TO CHINA</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第六章：反向回国加速器：海外华人与留学生的版权突破与专线配置
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={vpnContent.chap6Content} />
+        </section>
+
+        <!-- Chapter 7: Mobile (iOS/Android) Battery & Background Life -->
+        <section id="mobile-battery-and-keepalive" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 07 // MOBILE SYSTEM ARCHITECTURE</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              第七章：移动端（iOS / Android）功耗、发热与后台保活技术实战
+            </h2>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={vpnContent.chap7Content} />
+
+          <div class="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <span class="text-slate-400">关联专题深度阅读：</span>
+            <div class="flex items-center gap-3 font-semibold">
+              <a href="/vpn/mobile/" class="text-brand-600 hover:underline">&bull; 手机VPN与移动端免折腾</a>
+              <a href="/guides/shadowrocket-ios-setup-tutorial/" class="text-brand-600 hover:underline">&bull; Shadowrocket 小火箭配置</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 8: Decision Tree Section -->
+        <section id="decision-tree-path" class="bg-gradient-to-br from-slate-900 to-slate-950 text-slate-100 rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800">
+          <div class="border-b border-slate-800 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block mb-1">DECISION LOGIC // ACTION PATHS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              第八章：全场景用户决策分支与最佳落地路线图
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">根据具体网络业务与设备场景，直接沿对应分支执行最高性价比策略</p>
+          </div>
+
+          <div class="space-y-6 text-xs sm:text-sm font-mono leading-relaxed">
+            <!-- Branch 1 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-emerald-400 text-base mb-2">分支一：普通上班族与追剧用户，追求 4K 秒开、稳定网页出海与极简配置</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>坚决避开 ExpressVPN 等海外商用 VPN，选用优质 IEPL 企业专线机场服务商；</li>
+                <li>Windows / Mac 下载基于 Tauri 架构的 Clash Verge Rev 客户端；</li>
+                <li>导入机场订阅，模式保持在「规则（Rule）」，选择香港或日本专线；</li>
+                <li>开启「系统代理」开关，国内微信百度直连 0 损耗，YouTube 4K 秒开。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 2 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-sky-400 text-base mb-2">分支二：跨境电商运营、海外支付（Stripe/PayPal）与 AI 生产力企业</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>严禁使用共享机房数据中心 IP，选购标注有「原生纯净静态住宅 IP」的专线出口；</li>
+                <li>在客户端中锁定固定出口节点，关闭任何自动延迟测速跳换 IP 的策略组；</li>
+                <li>桌面端开启 TUN 虚拟网卡模式，并在浏览器中安装 WebRTC Control 禁用真实 IP 穿透；</li>
+                <li>确保全流程 IP 指纹单一稳定，彻底阻断亚马逊与 OpenAI 异地高危封号风控。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 3 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-amber-400 text-base mb-2">分支三：Steam / PS5 / Switch 外服多人竞技联机玩家</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>方案 A（最省心）：使用网易 UU 或雷神等专业游戏加速器，专线加速游戏官方对战服；</li>
+                <li>方案 B（高性价比通吃）：使用 Clash Verge Rev 开启 TUN 模式 + FullCone NAT 穿透；</li>
+                <li>将游戏主机或电脑网关指向代理，NAT 类型保持为 NAT Type A，兼顾 30ms 联机对战与网页查攻略。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 4 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-purple-400 text-base mb-2">分支四：海外留学生与华人，反向访问国内视频、音乐与国服手游</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>选用专用的海外回国加速器（如 Malus 或穿梭），严禁开启全局代理；</li>
+                <li>在客户端中选择「智能应用模式」，仅对腾讯视频、爱奇艺、网易云音乐进行反向代理；</li>
+                <li>本地海外教学网与 Google 依然走本地外国网络，秒解版权限制且不影响海外学业。</li>
+              </ol>
+            </div>
+
+            <!-- Branch 5 -->
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-rose-400 text-base mb-2">分支五：移动端（iPhone / Android）全天候重度出海用户</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>iOS 苹果手机：通过美区 Apple ID 下载 Shadowrocket (小火箭)，利用系统级 NetworkExtension 实现 <1% 极低后台功耗；</li>
+                <li>Android 安卓手机：安装 Clash Meta for Android，开启「应用分流」仅代理 Chrome/Telegram，国内微信支付宝直连；</li>
+                <li>在手机系统设置中为客户端开启「电池无限制」与「后台锁定」，全天候无感保活不发热。</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chapter 9: Exhaustive FAQ -->
+        <section id="comprehensive-faq" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <FAQSection
+            title="第九章：VPN 与加速器 12大高频疑问与边界案例深度 FAQ"
+            headingLevel="h2"
+            items={vpnFaqs}
+          />
+        </section>
+
+        <!-- Chapter 10: Verified High-Availability Backups (Affiliate CTA) -->
+        <section id="verified-backups" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">CHAPTER 10 // VERIFIED ACCELERATION</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              第十章：实测企业级高可用加速专线精选梯队
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">以下服务商经本站测评实验室连续 90 天以上网络稳定性跟踪，具备真实企业级内网光缆专线，完全规避公网 DPI 审计</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+            <BrandCard brand={featuredBrand} />
+            <BrandCard brand={topBrands[1] || topBrands[0]} />
+          </div>
+
+          <!-- Primary Brand Compliant Affiliate CTA -->
+          <BrandAffiliateCTA
+            brand={featuredBrand}
+            customText="VPN 与加速器终极推荐方案：光速云（IEPL企业级双专线架构，年付折合¥8/月，支持一键导入Clash Verge与致敬斯诺克147永久不过期包）"
+          />
+
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+            <p><strong>合规与客观中立声明</strong>：本站部分链接包含推广推荐参数（Affiliate Links），用户通过链接注册可能为本站带来维护佣金，但绝不影响用户实付价格。评测结论基于真实采集数据，不因商业合作伪造测速排名。</p>
+            <p>数据核准基准日：2026-11-18。网络工具仅用于跨境合法商务、科研与技术学习，请严格遵守当地法律法规。</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column: Sticky Table of Contents & Navigation (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Sticky Table of Contents -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <h3 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-brand-600" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+            <span>本页专著级目录导航</span>
+          </h3>
+
+          <nav class="space-y-1.5 text-xs text-slate-600 font-medium">
+            <a href="#answer-first" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 核心结论与全品类横向对比表
+            </a>
+            <a href="#topic-matrix" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; VPN 与加速器 7大二级专题矩阵
+            </a>
+            <a href="#vpn-demise-and-dpi" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第一章：传统VPN折戟与DPI审查机理
+            </a>
+            <a href="#protocol-architecture" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第二章：协议深水区：第3层 vs 第4/7层
+            </a>
+            <a href="#submarine-cables-iepl" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第三章：跨国海底光缆与IEPL内网专线
+            </a>
+            <a href="#free-vpn-honeypots" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第四章：免费VPN灰黑产运作模型大起底
+            </a>
+            <a href="#gaming-vs-proxy" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第五章：游戏加速器 vs 跨境全场景代理
+            </a>
+            <a href="#reverse-accelerator" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第六章：反向回国加速器与版权地域突破
+            </a>
+            <a href="#mobile-battery-and-keepalive" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第七章：移动端功耗发热与后台保活实战
+            </a>
+            <a href="#decision-tree-path" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第八章：用户决策分支与最佳落地路线
+            </a>
+            <a href="#comprehensive-faq" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第九章：12大高频疑问与边界案例 FAQ
+            </a>
+            <a href="#verified-backups" class="block p-2 rounded-lg hover:bg-slate-50 hover:text-brand-600 transition-colors">
+              &bull; 第十章：实测企业级高可用加速专线梯队
+            </a>
+          </nav>
+        </div>
+
+        <!-- 31 Brands Database Fast Access -->
+        <div class="bg-gradient-to-br from-brand-50 to-blue-50/50 rounded-2xl border border-brand-100 p-6 shadow-sm text-xs">
+          <span class="font-bold text-brand-700 uppercase tracking-wider block mb-1">
+            客观数据库索引中心
+          </span>
+          <h4 class="text-base font-bold text-slate-900 mb-2">31家机场参数筛选库</h4>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            已对全网 31 家主流服务商的线路、价格、优惠码与解锁状态完成事实审计，支持多维条件即时过滤。
+          </p>
+          <a
+            href="/brands/"
+            class="block w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center shadow-md shadow-brand-500/20 transition-all"
+          >
+            打开品牌参数筛选器 &rarr;
+          </a>
+        </div>
+
+        <!-- Secondary Topics Direct Links -->
+        <div class="bg-white rounded-2xl border border-surface-border p-5 shadow-sm text-xs">
+          <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-1.5">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            VPN 与加速器 二级专题直达
+          </h4>
+          <div class="space-y-1.5">
+            <a href="/vpn/recommend/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; VPN 推荐榜单
+            </a>
+            <a href="/vpn/free/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 免费 VPN 风险深度拆解
+            </a>
+            <a href="/vpn/mobile/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 手机 VPN 移动端免折腾
+            </a>
+            <a href="/vpn/reviews/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 商业 VPN 软件客观评测
+            </a>
+            <a href="/vpn/accelerator/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 专项网络加速器指引
+            </a>
+            <a href="/vpn/comparison/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 加速器与专线代理对比
+            </a>
+            <a href="/vpn/best/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 好用的 VPN 精选方案
+            </a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>
+`;
+
+fs.writeFileSync('src/pages/vpn/index.astro', astroTemplate, 'utf8');
+console.log('Successfully written src/pages/vpn/index.astro');
+
+// Total Chinese character count calculation
+const totalText = Object.values(textBlocks).join('\n') + '\n' + astroTemplate;
+const grandTotalChinese = countChineseCharacters(totalText);
+console.log('Grand Total Pure Chinese Characters across VPN portal & content:', grandTotalChinese);

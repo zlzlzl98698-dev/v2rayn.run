@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/common/Breadcrumb.astro';
+import BrandCard from '../../components/cards/BrandCard.astro';
+import BrandAffiliateCTA from '../../components/review/BrandAffiliateCTA.astro';
+import FAQSection from '../../components/common/FAQSection.astro';
+import { brands, getFeaturedBrands, getTopBrands } from '../../data/brands';
+import contentData from '../../data/airport_subtopics/ranking.json';
+
+const featuredBrand = getFeaturedBrands()[0] || brands[0]; // 光速云
+const topBrands = getTopBrands(3);
+
+const topicSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: '2026 商业机场综合天梯排行榜：晚高峰带宽、延迟稳定性与流媒体解锁深度打分',
+  description: 'v2rayn指南测评实验室权威出品：2026年商业机场综合天梯排行榜。结合电信/联通/移动三网晚高峰单线程带宽、IEPL企业内网专线丢包率、流媒体4K解锁与存活历史进行五维深度量化打分。',
+  author: {
+    '@type': 'Organization',
+    name: 'v2rayn指南测评实验室',
+    url: 'https://v2rayn.run/'
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'v2rayn指南',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://v2rayn.run/favicon.webp'
+    }
+  },
+  datePublished: '2026-10-22T08:00:00+08:00',
+  dateModified: '2026-11-18T21:15:00+08:00',
+  mainEntityOfPage: 'https://v2rayn.run/airport/ranking/'
+};
+---
+
+<BaseLayout
+  title="机场排行：2026专线质量、晚高峰吞吐与延迟天梯综合榜单 | v2rayn指南"
+  description="v2rayn指南测评实验室权威出品：2026年商业机场综合天梯排行榜。结合电信/联通/移动三网晚高峰单线程带宽、IEPL企业内网专线丢包率、流媒体4K解锁与存活历史进行五维深度量化打分。"
+  canonical="https://v2rayn.run/airport/ranking/"
+  schema={topicSchema}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb -->
+    <Breadcrumb
+      items={[
+        { name: '机场推荐', href: '/airport/' },
+        { name: '2026 商业机场综合天梯排行榜' }
+      ]}
+    />
+
+    <!-- Header Section -->
+    <header class="my-6 max-w-4xl">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">
+          机场推荐 // 深度专题
+        </span>
+        <span class="text-xs text-slate-400">&bull;</span>
+        <span class="text-xs text-emerald-600 font-semibold">2026 深度实测</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+        2026 商业机场综合天梯排行榜：晚高峰带宽、延迟稳定性与流媒体解锁深度打分
+      </h1>
+      <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+        v2rayn指南测评实验室权威出品：2026年商业机场综合天梯排行榜。结合电信/联通/移动三网晚高峰单线程带宽、IEPL企业内网专线丢包率、流媒体4K解锁与存活历史进行五维深度量化打分。
+      </p>
+    </header>
+
+    <!-- Main Content & Layout (8 cols + 4 cols sidebar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      
+      <!-- Left Content (8 cols) -->
+      <div class="lg:col-span-8 space-y-10">
+        
+        <!-- Answer-First Box -->
+        <section id="answer-first" class="bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent rounded-3xl border border-amber-200/80 p-6 sm:p-8 shadow-sm">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/20">
+              ⚡
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-slate-900">
+                核心结论速览：Answer-First 核心直接结论与实战避坑
+              </h2>
+              <p class="text-xs sm:text-sm text-slate-500 mt-0.5">面向实际选型、深度配置与排障的第一响应行动指引</p>
+            </div>
+          </div>
+
+          <div class="prose max-w-none text-slate-700 leading-relaxed text-sm" set:html={contentData.answerFirst} />
+
+          <div class="mt-6 pt-5 border-t border-amber-200/60">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-3">
+              核心参数与横向对比速查表
+            </h3>
+            <div set:html={contentData.table1} />
+          </div>
+        </section>
+
+        <!-- Chapter 1 -->
+        
+        <section id="chap-1" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap1} />
+        </section>
+
+        <!-- Chapter 2 -->
+        
+        <section id="chap-2" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap2} />
+        </section>
+
+        <!-- Chapter 3 -->
+        
+        <section id="chap-3" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap3} />
+        </section>
+
+        <!-- Chapter 4 -->
+        
+        <section id="chap-4" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="prose max-w-none text-slate-700 leading-relaxed" set:html={contentData.chap4} />
+        </section>
+
+        <!-- Decision Tree Section -->
+        <section id="decision-tree" class="bg-gradient-to-br from-slate-900 to-slate-950 text-slate-100 rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800">
+          <div class="border-b border-slate-800 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block mb-1">DECISION MATRIX // ACTION PATHS</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              用户决策分支与最佳实操路线图
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">根据具体需求与网络环境，直接沿对应分支执行最优策略</p>
+          </div>
+
+          <div class="space-y-6 text-xs sm:text-sm font-mono leading-relaxed">
+            
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-emerald-400 text-base mb-2">分支一：追求天梯综合第一，用于核心业务、学术办公与跨国协作</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>第一步：在天梯总榜中直接选择 S 级旗舰王者梯队（光速云）；</li>
+                <li>第二步：验证上海/广州三网 BGP 动态入口连通性，实测晚高峰延迟低于 25ms；</li>
+                <li>第三步：开启客户端 DNS 防污染分流，确立主力生产力通道。</li>
+              </ol>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-sky-400 text-base mb-2">分支二：追求极致影音大带宽，用于多设备 4K/8K 流媒体狂刷</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>第一步：选择天梯榜单中晚高峰持续下行超过 75,000 Kbps 的 A+ 级大带宽机场；</li>
+                <li>第二步：在电脑或电视盒子上配置大并发转发策略，测速验证单线程吞吐；</li>
+                <li>第三步：搭配高倍率防抖动策略组，享受超高清无卡顿拖动。</li>
+              </ol>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-amber-400 text-base mb-2">分支三：追求天梯平民性价比，用于低成本日常出海与文献下载</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>第一步：在 A 级平民梯队中筛选月费在 10-15 元/月区间的成熟品牌（如肥猫云）；</li>
+                <li>第二步：优先核对节点倍率透明度，确保无暗扣流量陷阱；</li>
+                <li>第三步：坚持月付结算，保障资金安全。</li>
+              </ol>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+              <div class="font-bold text-purple-400 text-base mb-2">分支四：追求极致网络安全，防范虚假测速与跑路风险</div>
+              <ol class="list-decimal pl-5 space-y-1.5 text-slate-300">
+                <li>第一步：拒绝任何空载非高峰期生成的虚假测速图误导；</li>
+                <li>第二步：自行通过 YouTube Stats for Nerds 真实核验晚高峰单线程带宽；</li>
+                <li>第三步：核查 IP 欺诈度评分（Fraud Score < 15 分），确保节点纯净合规。</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <!-- Exhaustive FAQ Section -->
+        <section id="faq-section" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <FAQSection
+            title="2026 商业机场综合天梯排行榜 常见高频疑问权威解答 (FAQ)"
+            headingLevel="h2"
+            items={contentData.faqs}
+          />
+        </section>
+
+        <!-- Chapter Verified Backups (Affiliate CTA) -->
+        <section id="verified-backups" class="bg-white rounded-3xl border border-surface-border p-6 sm:p-10 shadow-sm">
+          <div class="border-b border-slate-100 pb-4 mb-6">
+            <span class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider block mb-1">VERIFIED PROVIDERS // DISASTER RECOVERY</span>
+            <h2 class="text-2xl font-bold text-slate-900">
+              测评实验室实测推荐高可用配置方案
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">经本站测评实验室连续 90 天网络稳定性跟踪，线路参数与真实带宽经事实审计</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+            <BrandCard brand={featuredBrand} />
+            <BrandCard brand={topBrands[1] || topBrands[0]} />
+          </div>
+
+          <!-- Primary Brand Compliant Affiliate CTA -->
+          <BrandAffiliateCTA
+            brand={featuredBrand}
+            customText="综合天梯榜首王者推荐：光速云（IEPL纯内网双专线，晚高峰实测下行突破85,000 Kbps，三网丢包率0%，支持24小时无条件退款保障）"
+          />
+
+          <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 space-y-1">
+            <p><strong>合规与客观中立声明</strong>：本站部分链接包含推广推荐参数（Affiliate Links），用户通过链接注册可能为本站带来维护佣金，但绝不影响用户实付价格。评测结论基于真实采集数据，不因商业合作伪造测速排名。</p>
+            <p>数据核准基准日：2026-11-18。网络工具仅用于跨境合法商务、科研与技术学习，请严格遵守当地法律法规。</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Sidebar (4 cols) -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+        
+        <!-- Parent Topic Portal Direct Link -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <span class="text-xs font-bold text-brand-600 uppercase tracking-wider block mb-1">
+            一级主题门户
+          </span>
+          <h4 class="text-base font-bold text-slate-900 mb-2">
+            机场推荐 综合知识库
+          </h4>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">
+            返回机场推荐一级门户，查看 10 大系统化专著章节、测速压测标准与 31 家品牌总览。
+          </p>
+          <a
+            href="/airport/"
+            class="block w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-center text-xs shadow-sm transition-colors"
+          >
+            &larr; 返回 机场推荐 门户
+          </a>
+        </div>
+
+        <!-- Sibling Subtopics Navigation -->
+        <div class="bg-white rounded-2xl border border-surface-border p-6 shadow-sm">
+          <h4 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-brand-600 rounded-full"></span>
+            机场推荐 关联精选专题
+          </h4>
+          <div class="space-y-1.5 text-xs">
+            
+            <a href="/airport/recommend/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 机场推荐 指南
+            </a>
+            <a href="/airport/cost-effective/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 性价比机场 指南
+            </a>
+            <a href="/airport/stable/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 稳定机场 指南
+            </a>
+            <a href="/airport/cheap/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 便宜机场 指南
+            </a>
+            <a href="/airport/free/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 免费梯子 指南
+            </a>
+            <a href="/airport/guide/" class="block p-2 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 font-medium">
+              &bull; 科学上网 指南
+            </a>
+          </div>
+        </div>
+
+        <!-- 31 Brands Database Fast Access -->
+        <div class="bg-gradient-to-br from-brand-50 to-blue-50/50 rounded-2xl border border-brand-100 p-5 shadow-sm text-xs">
+          <span class="font-bold text-brand-700 uppercase tracking-wider block mb-1">
+            客观数据库索引中心
+          </span>
+          <p class="text-slate-600 leading-relaxed mb-3">
+            想按协议、客户端或特定价格自由组合筛选？访问本站 31 家机场品牌实时数据库。
+          </p>
+          <a
+            href="/brands/"
+            class="block w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-center shadow-sm transition-colors"
+          >
+            打开品牌参数筛选器 &rarr;
+          </a>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>
